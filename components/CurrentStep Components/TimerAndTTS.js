@@ -57,8 +57,8 @@ const TimerAndTTS = ({step, instructions, time}) => {
     return (
         <View style={{flex: 1, marginTop: 50 }}>
             <View style={{alignItems: 'center'}}>
-                <Text style={{fontSize: 70}}>{`${minutes}:${seconds}`}</Text>
-                <Text style={{fontSize: 20}}>minutes    seconds</Text>
+                <Text style={{fontSize: 70, color: '#000000'}}>{`${minutes}:${seconds}`}</Text>
+                <Text style={{fontSize: 20, color: '#000000'}}>minutes    seconds</Text>
             </View>
 
             <View style={{flex: 0.6, marginTop: 40}}>
@@ -67,18 +67,18 @@ const TimerAndTTS = ({step, instructions, time}) => {
                         <Text style={{fontSize: 20}}> - </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.adjustTimer} onPress={resetTimer}>
-                        <Text style={{fontSize: 15, color: 'black'}}> Reset </Text>
+                        <Text style={{fontSize: 15, color: '#000000'}}> Reset </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.timerIcon} onPress={addTime}>
-                        <Text style={{fontSize: 20}}> + </Text>
+                        <Text style={{fontSize: 20, color: '#000000'}}> + </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     <TouchableOpacity style={styles.resumebtn} onPress={toggleTimer}>
-                        { isActive ?  <Text style={{fontSize: 15}}> Pause </Text> :  <Text style={{fontSize: 15}}> Resume </Text> }
+                        { isActive ?  <Text style={{fontSize: 15, color: '#000000'}}> Pause </Text> :  <Text style={{fontSize: 15, color: '#000000'}}> Resume </Text> }
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tts}>
-                        <Text style={{fontSize: 15}}> Read Instructions </Text>
+                        <Text style={{fontSize: 15, color: '#000000'}}> Read Instructions </Text>
                     </TouchableOpacity>
                 </View>
             </View>

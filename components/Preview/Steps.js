@@ -48,17 +48,17 @@ const Steps = () => {
                 <View key={index} style={styles.step}>
                     <View style={styles.overview}>
                         <View style={styles.stepNumber}>
-                            <Text style={{fontWeight:"bold", fontSize: 18}}> Step {step.step} </Text>
-                            <Text> {step.timer / 60} minutes </Text>
+                            <Text style={{fontWeight:"bold", fontSize: 18, color: '#000000'}}> Step {step.step} </Text>
+                            <Text style={{color: '#000000'}}> {step.timer / 60} minutes </Text>
                         </View>
                         <View style={styles.timerbtn}>
                             <TouchableOpacity onPress={() => {editTimer(index)}}>
-                                <Text> edit timer </Text>
+                                <Text style={{color: '#000000'}}> edit timer </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.details}>
-                        <Text> {step.details} </Text>
+                        <Text style={{color: '#000000'}}> {step.details} </Text>
                     </View>
                     <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
                         <View style={{ flex:1}}>

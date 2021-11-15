@@ -134,12 +134,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     stepInd: {
-        fontSize: 35
+        fontSize: 35,
+        color: '#000000'
     },
     deets: {
         fontSize: 20,
         marginBottom: 10,
-        padding: 30
+        padding: 30,
+        color: '#000000'
     }
 });
 

@@ -65,7 +65,7 @@ function PasteLink( { navigation } ) {
             placeholder='paste recipe url here'
             onChangeText={(val) => setURL(val)}/>
             <TouchableOpacity style={styles.button} onPress={fetchData}>
-            <Text>GO</Text>
+            <Text style={{ color: '#000000' }}>GO</Text>
             </TouchableOpacity> 
         </View>
     )

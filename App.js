@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
- import React, {useEffect, useState} from 'react';
+ import React from 'react';
  import { RecoilRoot } from 'recoil';
  
  import Dashboard from './components/Dashboard';
@@ -14,9 +14,7 @@
  
  import { NavigationContainer } from '@react-navigation/native';
  import { createStackNavigator } from '@react-navigation/stack';
- 
- import { StyleSheet, Text, View } from "react-native";
- 
+  
  const Stack = createStackNavigator();
  
  export default function App() {
