@@ -1,9 +1,9 @@
-// import React, { useRef } from 'react'
+import React, { useRef } from 'react'
 // import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView } from 'react-native';
 // import { useRecoilState } from 'recoil';
 // import { stepsState } from '../atoms/Steps';
 
-const CurrentStep = () => {
+const CurrentStep = ( { navigation }) => {
     return ( 
         <View>
             <Text>CurrentStep</Text>
