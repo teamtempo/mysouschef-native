@@ -44,6 +44,7 @@ function CurrentStep() {
 
       const onSpeechError = (e) => {
         console.log('onSpeechError: ', e);
+        addListener();
         setError({
           error: JSON.stringify(e.error),
         });
