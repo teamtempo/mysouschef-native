@@ -9,12 +9,9 @@ import History from './Dashboard Components/History';
 
 import { pastLinks } from '../atoms/PastLinks';
 
-
-
 function Dashboard({ navigation }) {
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
 
-  
     async function getData() {
       try {
         AsyncStorage.getAllKeys()
