@@ -23,9 +23,11 @@ const TimerAndTTS = ({step, instructions, time}) => {
     useEffect(() => {
         if (voiceResultsState === "stop") {
             stopTimer();
+            setVoiceResultsState("");
         }
         if (voiceResultsState === "start") {
             startTimer();
+            setVoiceResultsState("");
         
     }},[voiceResultsState]);
 
