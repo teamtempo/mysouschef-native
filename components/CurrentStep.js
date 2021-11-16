@@ -1,8 +1,10 @@
-import React, { useRef } from 'react'
-import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView } from 'react-native';
+import React, { useRef, useEffect } from 'react'
+import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView, Button } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
+import { PorcupineManager } from '@picovoice/porcupine-react-native';
+
 
 function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
@@ -10,6 +12,55 @@ function CurrentStep() {
     const [steps, setSteps] = useRecoilState(stepsState);
     console.log(steps)
 
+    let porcupineManager;
+
+    async function createPorcupineManager() {
+        try {
+          
+          porcupineManager = await PorcupineManager.fromKeywords(
+            ["blueberry", "porcupine"],
+            detectionCallback)
+            addListener();
+            console.log(porcupineManager);
+            console.log("porcupine started")
+    
+        } catch(err) {
+          console.log(err);
+        }
+      }
+    
+      function detectionCallback(keyWordIndex) {
+        if(keyWordIndex === 0) {
+          console.log("blueberry detected")
+        } else if (keyWordIndex === 1) {
+          console.log("porcupine detected")
+        }
+      }
+    
+      async function addListener() {
+        await porcupineManager.start();
+        console.log("started")
+      }
+    
+      async function stopListener() {
+        await porcupineManager.stop();
+        console.log("stopped")
+       
+      }
+    
+      async function removeListeners() {
+        await porcupineManager.delete();
+        console.log("deleted")
+      }
+
+    useEffect(() => {
+        createPorcupineManager();
+        return () => {
+            removeListeners();
+    }
+    }, [])
+   
+    
     const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82'];
 
     const Indicator=({scrollX}) => {

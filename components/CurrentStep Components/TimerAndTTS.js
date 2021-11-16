@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+import say from '../../helpers/tts-helper';
+
 const formatNumber = number => `0${number}`.slice(-2);
 
 const getRemaining = (time) => {
@@ -14,9 +16,9 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const [isActive, setIsActive] = useState(false);
     const { minutes, seconds } = getRemaining(remainingSecs);
 
-    // const speak = () => {
-    //     say(`Step ${step}, ${instructions}`)
-    // }
+    const speak = () => {
+        say(`Step ${step}, ${instructions}`)
+    }
 
     const toggleTimer = () => {
         setIsActive(!isActive);
@@ -77,7 +79,7 @@ const TimerAndTTS = ({step, instructions, time}) => {
                     <TouchableOpacity style={styles.resumebtn} onPress={toggleTimer}>
                         { isActive ?  <Text style={{fontSize: 15, color: '#000000'}}> Pause </Text> :  <Text style={{fontSize: 15, color: '#000000'}}> Resume </Text> }
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tts}>
+                    <TouchableOpacity style={styles.tts} onPress={speak}>
                         <Text style={{fontSize: 15, color: '#000000'}}> Read Instructions </Text>
                     </TouchableOpacity>
                 </View>
