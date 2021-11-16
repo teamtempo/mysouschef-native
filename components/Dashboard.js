@@ -10,9 +10,6 @@ import History from './Dashboard Components/History';
 import { pastLinks } from '../atoms/PastLinks';
 import { micPermission } from '../atoms/MicPermission';
 
-
-
-
 function Dashboard({ navigation }) {
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
     const [micPermissionState, setMicPermissionState] = useRecoilState(micPermission);

@@ -1,16 +1,82 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect,useState } from 'react'
 import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView, Button } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
 import { PorcupineManager } from '@picovoice/porcupine-react-native';
-
+import Voice from '@react-native-voice/voice';
 
 function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
     const [steps, setSteps] = useRecoilState(stepsState);
-    console.log(steps)
+    //stores the results from the speech recognition    
+    const [result, setResult] = useState('')
+    const [isLoading, setLoading] = useState(false)
+    const [error, setError] = useState('');
+
+    //console.log(steps)
+
+    //checking on the speech service
+    useEffect(async() => {
+        console.log("voice check:", await Voice.getSpeechRecognitionServices());
+        console.log("voice check:", await Voice.isAvailable());
+    },[]);
+
+    //VOICE RECOGNITION SECTION
+    useEffect(() => {
+        Voice.onSpeechStart = onSpeechStartHandler;
+        Voice.onSpeechEnd = onSpeechEndHandler;
+        Voice.onSpeechResults = onSpeechResultsHandler;
+        Voice.onSpeechError = onSpeechError;
+        return () => {
+          Voice.destroy().then(Voice.removeAllListeners);
+        }
+      }, [])
+
+      const onSpeechStartHandler = (e) => {
+        console.log("start handler==>>>", e)
+      }
+      const onSpeechEndHandler = (e) => {
+        setLoading(false)
+        console.log("stop handler", e)
+      }
+
+      const onSpeechError = (e) => {
+        console.log('onSpeechError: ', e);
+        setError({
+          error: JSON.stringify(e.error),
+        });
+      };
+    
+      //add functionality here to call the function that will deal with the relevant action
+      const onSpeechResultsHandler = (e) => {
+        let text = e.value[0]
+        setResult(text)
+        addListener();
+        console.log("speech result handler", e)
+      }
+    
+      const startRecording = async () => {
+        setLoading(true)
+        try {
+            stopListener();
+            await Voice.start('en-Uk',{ RECOGNIZER_ENGINE: 'GOOGLE' })
+        } catch (error) {
+            console.log("error raised", error)
+        }
+      }
+    
+      const stopRecording = async () => {
+        try {
+          await Voice.stop()
+          console.log("stop")
+        } catch (error) {
+          console.log("error raised", error)
+        }
+      }
+
+    //VOICE RECOGNITION END
 
     let porcupineManager;
 
@@ -18,7 +84,7 @@ function CurrentStep() {
         try {
           
           porcupineManager = await PorcupineManager.fromKeywords(
-            ["blueberry", "porcupine"],
+            ["blueberry"],
             detectionCallback)
             addListener();
             console.log(porcupineManager);
@@ -32,8 +98,9 @@ function CurrentStep() {
       function detectionCallback(keyWordIndex) {
         if(keyWordIndex === 0) {
           console.log("blueberry detected")
+          startRecording();
         } else if (keyWordIndex === 1) {
-          console.log("porcupine detected")
+          console.log("FUCK YOU porcupines")
         }
       }
     
@@ -59,8 +126,7 @@ function CurrentStep() {
             removeListeners();
     }
     }, [])
-   
-    
+       
     const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82'];
 
     const Indicator=({scrollX}) => {
@@ -152,7 +218,7 @@ function CurrentStep() {
             onScroll={Animated.event(
                 [{nativeEvent: {contentOffset: {x: scrollX}}}],
                 {useNativeDriver: false}
-            )}
+                )}
             contentContainerStyle={{paddingBottom: 100}}
             showsHorizontalScrollIndicator={false}
             pagingEnabled
@@ -160,6 +226,8 @@ function CurrentStep() {
                 return (
                     <View style={{width, alignItems: 'center'}}>
                         <View style={{ flex: 0.3, justifyContent: 'center'}}>
+                        <Button title="Press me to stop" onPress={stopRecording} />
+                        <Text style={{color: '#000000'}}>The voice results go here: {result}</Text>
                             <Text style={styles.stepInd}> Step { item.step } of {steps.length} </Text>
                         </View>
                         <View style={{ flex: 0.4 }}>
