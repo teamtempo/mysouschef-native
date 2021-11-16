@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
 
+
 function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
