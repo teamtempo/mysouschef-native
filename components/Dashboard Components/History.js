@@ -7,18 +7,7 @@ import { pastLinks } from '../../atoms/PastLinks';
 function History() {
     const previous = useRecoilValue(pastLinks);
 
-    useEffect(() => {
-    }, []);
-
-    for (let i = 0; i < previous.length; i++) {
-        console.log(previous[i].value);
-
-    }
-
     
-
-
-
     return (
         <View style={styles.container}>
 
