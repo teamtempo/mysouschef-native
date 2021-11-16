@@ -3,6 +3,7 @@ import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView } fr
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
+import { PorcupineManager } from '@picovoice/porcupine-react-native';
 
 
 function CurrentStep() {
@@ -10,6 +11,44 @@ function CurrentStep() {
     const {width, height} = Dimensions.get('screen');
     const [steps, setSteps] = useRecoilState(stepsState);
     console.log(steps)
+
+    async function createPorcupineManager() {
+        try {
+          
+          porcupineManager = await PorcupineManager.fromKeywords(
+            ["blueberry", "porcupine"],
+            detectionCallback)
+            console.log(porcupineManager);
+            console.log("porcupine started")
+    
+        } catch(err) {
+          console.log(err);
+        }
+      }
+    
+      function detectionCallback(keyWordIndex) {
+        if(keyWordIndex === 0) {
+          console.log("blueberry detected")
+        } else if (keyWordIndex === 1) {
+          console.log("porcupine detected")
+        }
+      }
+    
+      async function addListener() {
+        await porcupineManager.start();
+        console.log("started")
+      }
+    
+      async function stopListener() {
+        await porcupineManager.stop();
+        console.log("stopped")
+       
+      }
+    
+      async function removeListeners() {
+        await porcupineManager.delete();
+        console.log("deleted")
+      }
 
     const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82'];
 

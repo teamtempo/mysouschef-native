@@ -9,7 +9,7 @@ import History from './Dashboard Components/History';
 
 import { pastLinks } from '../atoms/PastLinks';
 import { micPermission } from '../atoms/MicPermission';
-import { PorcupineManager } from '@picovoice/porcupine-react-native';
+
 
 
 
@@ -125,7 +125,6 @@ function Dashboard({ navigation }) {
                             <View style={styles.body}>
                                 <View style={styles.item}>
                                     <PasteLink navigation={navigation}/>
-                                    <Button title="hey" onPress={createPorcupineManager}/>
                                 </View>
                                 <View style={styles.item}>
                                     <History />
