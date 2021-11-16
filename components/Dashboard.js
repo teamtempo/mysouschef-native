@@ -16,7 +16,6 @@ import { micPermission } from '../atoms/MicPermission';
 function Dashboard({ navigation }) {
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
     const [micPermissionState, setMicPermissionState] = useRecoilState(micPermission);
-    let porcupineManager;
 
     async function requestAudioPermission() {
         try {

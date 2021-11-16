@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView } from 'react-native';
+import React, { useRef, useEffect } from 'react'
+import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView, Button } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
@@ -12,12 +12,15 @@ function CurrentStep() {
     const [steps, setSteps] = useRecoilState(stepsState);
     console.log(steps)
 
+    let porcupineManager;
+
     async function createPorcupineManager() {
         try {
           
           porcupineManager = await PorcupineManager.fromKeywords(
             ["blueberry", "porcupine"],
             detectionCallback)
+            addListener();
             console.log(porcupineManager);
             console.log("porcupine started")
     
@@ -50,6 +53,14 @@ function CurrentStep() {
         console.log("deleted")
       }
 
+    useEffect(() => {
+        createPorcupineManager();
+        return () => {
+            removeListeners();
+    }
+    }, [])
+   
+    
     const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82'];
 
     const Indicator=({scrollX}) => {
