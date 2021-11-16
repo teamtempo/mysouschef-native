@@ -16,7 +16,7 @@ function Generate( { navigation } ) {
 const styles = StyleSheet.create({
     button: {
         borderRadius: 60,
-        backgroundColor: '#6E352D',
+        backgroundColor: '#9AD3BB',
         width: 350,
         height: 70,
         alignItems: 'center',
