@@ -10,6 +10,7 @@ function storeData(key, value) {
     AsyncStorage.setItem(key, value)
       .then(() => {
         console.log("Stored value", value);
+      
       })
       .catch((e) => {
         alert("Error saving to AsyncStorage:" + JSON.stringify(e));
@@ -28,8 +29,7 @@ function PasteLink( { navigation } ) {
           }, 1);
           return () => clearTimeout(timer);
     }
-
-
+    
     useEffect(() => {
         steps.current = initSteps
     }, [initSteps])
@@ -52,7 +52,7 @@ function PasteLink( { navigation } ) {
             alert("The url provided must include http:// or https://")
         } else {
             navigation.navigate('Preview')
-            addHistory(url, res.data[0].title);
+            addHistory(url, `${res.data[0].title}`);
             setInitSteps(res.data.slice(1));
         }
     }

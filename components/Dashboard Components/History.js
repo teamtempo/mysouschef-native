@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, StyleSheet, FlatList } from 'react-native'
 import { useRecoilValue } from 'recoil';
 import HistoryItem from './HistoryItem';
@@ -6,6 +6,16 @@ import { pastLinks } from '../../atoms/PastLinks';
 
 function History() {
     const previous = useRecoilValue(pastLinks);
+
+    useEffect(() => {
+    }, []);
+
+    for (let i = 0; i < previous.length; i++) {
+        console.log(previous[i].value);
+
+    }
+
+    
 
 
 
