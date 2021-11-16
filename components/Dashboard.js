@@ -1,16 +1,84 @@
 import {useRecoilState} from 'recoil';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect } from 'react'
-import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, Button } from 'react-native';
 
 import Instructions from './Dashboard Components/Instructions';
 import PasteLink from './Dashboard Components/PasteLink';
 import History from './Dashboard Components/History';
 
 import { pastLinks } from '../atoms/PastLinks';
+import { micPermission } from '../atoms/MicPermission';
+
+
+
 
 function Dashboard({ navigation }) {
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
+    const [micPermissionState, setMicPermissionState] = useRecoilState(micPermission);
+
+    async function requestAudioPermission() {
+        try {
+          
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+            {
+              title: "Mysouschef microphone permission",
+              message: "onegai",
+              buttonNeutral: "Ask Me Later",
+              buttonNegative: "Cancel",
+              buttonPositive: "OK"
+            }
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            setMicPermissionState(true);
+            console.log("You can use the Microphone");
+          } else {
+            console.log("Microphone permission denied");
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      };
+
+      async function createPorcupineManager() {
+        try {
+          
+          porcupineManager = await PorcupineManager.fromKeywords(
+            ["blueberry", "porcupine"],
+            detectionCallback)
+            console.log(porcupineManager);
+            console.log("porcupine started")
+    
+        } catch(err) {
+          console.log(err);
+        }
+      }
+    
+      function detectionCallback(keyWordIndex) {
+        if(keyWordIndex === 0) {
+          console.log("blueberry detected")
+        } else if (keyWordIndex === 1) {
+          console.log("porcupine detected")
+        }
+      }
+    
+      async function addListener() {
+        await porcupineManager.start();
+        console.log("started")
+      }
+    
+      async function stopListener() {
+        await porcupineManager.stop();
+        console.log("stopped")
+       
+      }
+    
+      async function removeListeners() {
+        await porcupineManager.delete();
+        console.log("deleted")
+      }
+    
 
     async function getData() {
       try {
@@ -29,8 +97,10 @@ function Dashboard({ navigation }) {
       }, [pastLinksState]);
 
     useEffect(() => {
-      getData();
-    }, []);
+        requestAudioPermission();
+        }, []);
+
+
   
     const logo = { uri: 'https://i.ibb.co/SyzsG9g/My-Sous-Chef-removebg-preview.png'}
     return (
