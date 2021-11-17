@@ -1,5 +1,5 @@
 import React, { useRef, useEffect,useState } from 'react'
-import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
