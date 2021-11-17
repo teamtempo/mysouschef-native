@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef }from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import axios from 'axios'
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
-import { clickedRecipe } from '../../atoms/ClickedRecipe';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function storeData(key, value) {
@@ -22,7 +21,6 @@ function PasteLink( { navigation } ) {
     const [url, setURL] = useState()
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
-    const link = useRecoilValue(clickedRecipe)
 
     const addHistory = (key, value) => {
         const timer = setTimeout(() => {
@@ -34,12 +32,6 @@ function PasteLink( { navigation } ) {
     useEffect(() => {
         steps.current = initSteps
     }, [initSteps])
-
-
-    useEffect(() => {
-        setURL(link);
-      }, [link]);
-
 
     async function fetchData() {
         const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}`);
@@ -54,7 +46,7 @@ function PasteLink( { navigation } ) {
         } else {
             navigation.navigate('Preview')
             addHistory(url, `${res.data[0].title}`);
-            setInitSteps(res.data.slice(1));
+            setInitSteps(res.data.slice(2));
             textInput.current.clear();
         }
     }
@@ -62,7 +54,6 @@ function PasteLink( { navigation } ) {
     return (
         <View style={styles.container}>
             <TextInput 
-            value={url}
             ref={textInput}
             style={styles.input}
             placeholder='paste recipe url here'

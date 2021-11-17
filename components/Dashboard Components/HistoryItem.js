@@ -2,7 +2,6 @@ import React, { useRef, useEffect }from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { pastLinks } from '../../atoms/PastLinks';
-import { clickedRecipe } from '../../atoms/ClickedRecipe';
 
 import axios from 'axios'
 import { useRecoilState } from 'recoil';
@@ -15,7 +14,6 @@ const HistoryItem = ({navigation, item}) => {
     const [links, setLinks] = useRecoilState(pastLinks);
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
-    const [clickedLink, setclickedLink] = useRecoilState(clickedRecipe);
 
     useEffect(() => {
         steps.current = initSteps
@@ -24,10 +22,9 @@ const HistoryItem = ({navigation, item}) => {
     async function getLink() {
         let clickedItem = links.find(link => link.value === item);
         let link = clickedItem.key.slice(1);
-        setclickedLink(link); 
         const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}`);
         navigation.navigate('Preview')  
-        setInitSteps(res.data.slice(1));
+        setInitSteps(res.data.slice(2));
     }
 
     async function deleteLink() {

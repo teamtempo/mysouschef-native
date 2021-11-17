@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, StyleSheet, FlatList } from 'react-native'
 import { useRecoilValue } from 'recoil';
 import HistoryItem from './HistoryItem';
@@ -7,7 +7,6 @@ import { pastLinks } from '../../atoms/PastLinks';
 function History({ navigation }) {
     const previous = useRecoilValue(pastLinks);
 
-    
     return (
         <View style={styles.container}>
            <FlatList data={previous} renderItem={({ item }) => <HistoryItem item={item.value} navigation={navigation}/>} keyExtractor={item => item.key}/>
