@@ -1,7 +1,7 @@
 import {useRecoilState} from 'recoil';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect } from 'react'
-import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, Button } from 'react-native';
+import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, ScrollView } from 'react-native';
 
 import Instructions from './Dashboard Components/Instructions';
 import PasteLink from './Dashboard Components/PasteLink';
@@ -16,7 +16,6 @@ function Dashboard({ navigation }) {
 
     async function requestAudioPermission() {
         try {
-          
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
             {
@@ -104,6 +103,7 @@ function Dashboard({ navigation }) {
             <TouchableWithoutFeedback onPress={() => {
                 Keyboard.dismiss();
             }}>
+              <ScrollView>
                 <KeyboardAvoidingView
                 behavior="position"
                 style={styles.container}
@@ -129,6 +129,7 @@ function Dashboard({ navigation }) {
                         </View>
                     </View>
                 </KeyboardAvoidingView>
+              </ScrollView>
             </TouchableWithoutFeedback>
         )
     }

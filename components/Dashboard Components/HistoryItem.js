@@ -30,9 +30,6 @@ const HistoryItem = ({item}) => {
             console.log(exception)
         }
     }
-        
-
-
     
     return (
         
