@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
 import Voice from '@react-native-voice/voice';
-import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResultsHandler, createPorcupineManager, removeListeners } from '../helpers/reactvoice-helper';
+import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResultsHandler, createPorcupineManager, removeListeners } from '../helpers/voice-helper';
 
 function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
