@@ -1,5 +1,5 @@
 import React, { useRef, useEffect,useState } from 'react'
-import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView, Button } from 'react-native';
+import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
@@ -11,20 +11,21 @@ function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
     const [steps, setSteps] = useRecoilState(stepsState);
-    //stores the results from the speech recognition    
+    const flatListRef = useRef();
+
+    // stores the results from the speech recognition    
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const [isLoading, setLoading] = useState(false)
     const [error, setError] = useState('');
     const [blueberry, setBlueberry ]= useState("");
-    //console.log(steps)
 
-    //checking on the speech service
+    // checking on the speech service
     useEffect(async() => {
         console.log("voice check:", await Voice.getSpeechRecognitionServices());
         console.log("voice check:", await Voice.isAvailable());
     },[]);
 
-    //VOICE RECOGNITION SECTION
+    // VOICE RECOGNITION SECTION
     useEffect(() => {
         Voice.onSpeechStart = onSpeechStartHandler;
         Voice.onSpeechEnd = onSpeechEndHandler;
@@ -52,7 +53,7 @@ function CurrentStep() {
         });
       };
     
-      //add functionality here to call the function that will deal with the relevant action
+      // add functionality here to call the function that will deal with the relevant action
       const onSpeechResultsHandler = (e) => {
         let text = e.value[0]
         setVoiceResultsState(text)
@@ -80,7 +81,6 @@ function CurrentStep() {
         }
       }
 
-    //VOICE RECOGNITION END
 
     let porcupineManager;
 
@@ -209,13 +209,19 @@ function CurrentStep() {
                 }
             ]
         }}/>
+    }   
+
+    const scrollToIndex = (i) => {
+      flatListRef.current.scrollToIndex({index: i});
     }
     
     return (
         <View style={styles.container}>
             <Backdrop scrollX={scrollX}/>
             <Square scrollX={scrollX}/>
-            <Animated.FlatList data={steps}
+            <Animated.FlatList 
+            data={steps}
+            ref={flatListRef}
             keyExtractor={item => item.step}
             horizontal
             scrollEventThrottle={32}
@@ -226,7 +232,7 @@ function CurrentStep() {
             contentContainerStyle={{paddingBottom: 100}}
             showsHorizontalScrollIndicator={false}
             pagingEnabled
-            renderItem={({item}) => {
+            renderItem={({item, index}) => {
                 return (
                     <View style={{width, alignItems: 'center'}}>
                         <View style={{ flex: 0.3, justifyContent: 'center'}}>
@@ -238,7 +244,7 @@ function CurrentStep() {
                             <Text style={styles.deets}> { item.details }</Text>
                             </ScrollView>
                         </View>
-                        <TimerAndTTS step={item.step} instructions={item.details} time={item.timer}/>
+                        <TimerAndTTS step={item.step} instructions={item.details} time={item.timer} index={index} scrollToIndex={scrollToIndex}/>
                     </View>
                 )
             }}/>

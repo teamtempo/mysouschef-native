@@ -14,7 +14,7 @@ const getRemaining = (time) => {
     return { minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
 }
 
-const TimerAndTTS = ({step, instructions, time}) => {
+const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const [remainingSecs, setRemainingSecs] = useState(time);
     const [isActive, setIsActive] = useState(false);
     const { minutes, seconds } = getRemaining(remainingSecs);
@@ -28,9 +28,12 @@ const TimerAndTTS = ({step, instructions, time}) => {
         if (voiceResultsState.includes("start")) {
             startTimer();
             setVoiceResultsState("");
-        
-    }},[voiceResultsState]);
-
+        }
+        if (voiceResultsState.includes("next")) {
+            scrollToIndex(index + 1)
+            setVoiceResultsState("");
+        }
+    },[voiceResultsState]);
 
 
     const speak = () => {
@@ -52,9 +55,6 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const resetTimer = () => {
         setRemainingSecs(time);
         setIsActive(false);
-        
-    
-       
     }
 
     const addTime = () => {
