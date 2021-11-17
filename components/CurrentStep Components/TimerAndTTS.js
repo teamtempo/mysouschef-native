@@ -21,12 +21,41 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
 
     useEffect(() => {
-        if (voiceResultsState.includes("stop")) {
+        if (voiceResultsState.includes("stop")
+        || voiceResultsState.includes("pause")) {
             stopTimer();
             setVoiceResultsState("");
         }
-        if (voiceResultsState.includes("start")) {
+        if (voiceResultsState.includes("start") 
+        || voiceResultsState.includes("go")
+        || voiceResultsState.includes("begin")
+        || voiceResultsState.includes("resume")) {
             startTimer();
+            setVoiceResultsState("");
+        } 
+        if (voiceResultsState.includes("read")
+        || voiceResultsState.includes("instructions")
+        || voiceResultsState.includes("step")
+        || voiceResultsState.includes("read the instructions")) {
+            speak();
+            setVoiceResultsState("");
+        }
+        if (voiceResultsState.includes("extend")
+        || voiceResultsState.includes("add")
+        || voiceResultsState.includes("increase")
+        || voiceResultsState.includes("more")) {
+            addTime();
+            setVoiceResultsState("");
+        }
+        if (voiceResultsState.includes("subtract")
+        || voiceResultsState.includes("decrease")
+        || voiceResultsState.includes("reduce")) {
+            subtractTime();
+            setVoiceResultsState("");
+        }
+        if (voiceResultsState.includes("reset")
+        || voiceResultsState.includes("restart")) {
+            resetTimer();
             setVoiceResultsState("");
         }
         if (voiceResultsState.includes("next")) {
@@ -34,6 +63,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             setVoiceResultsState("");
         }
     },[voiceResultsState]);
+
 
 
     const speak = () => {
