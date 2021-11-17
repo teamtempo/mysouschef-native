@@ -103,7 +103,6 @@ function Dashboard({ navigation }) {
             <TouchableWithoutFeedback onPress={() => {
                 Keyboard.dismiss();
             }}>
-              <ScrollView>
                 <KeyboardAvoidingView
                 behavior="position"
                 style={styles.container}
@@ -129,7 +128,6 @@ function Dashboard({ navigation }) {
                         </View>
                     </View>
                 </KeyboardAvoidingView>
-              </ScrollView>
             </TouchableWithoutFeedback>
         )
     }

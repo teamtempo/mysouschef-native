@@ -17,7 +17,7 @@ const HistoryItem = ({item}) => {
         console.log(clickedItem);
         let link = clickedItem.key.slice(1);
         console.log(link)
-        setclickedLink(link);
+        setclickedLink(link); 
     }
 
     async function deleteLink() {
@@ -35,21 +35,22 @@ const HistoryItem = ({item}) => {
         
         <View style={ styles.container }>
             <View>
-            <TouchableOpacity onPress={() => {getLink()}}>
                 <Text style={styles.text}>{item}</Text>
-            </TouchableOpacity>
             </View>
-           
-            <View>
-                <TouchableOpacity onPress={() => {deleteLink()}} style={{marginLeft: 10}}>
-                <Icon name="trash" size={20} color="#9AD3BB"/>
+            
+            <View style={styles.icons}>
+                <TouchableOpacity onPress={getLink}>
+                        <Icon name="check-circle" size={20} color="#9AD3BB"/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={deleteLink} style={{marginLeft: 10}}>
+                    <Icon name="trash" size={20} color="#9AD3BB"/>
                 </TouchableOpacity>
             </View>
           
                 
         </View>
             
-    )
+    ) 
 }
 
 const styles = StyleSheet.create({
@@ -64,8 +65,13 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         color: '#000000',
-       
-    }
+    },
+    icons: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
 })
 
 export default HistoryItem

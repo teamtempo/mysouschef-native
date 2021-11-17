@@ -10,7 +10,6 @@ function History() {
     
     return (
         <View style={styles.container}>
-
            <FlatList data={previous} renderItem={({ item }) => <HistoryItem item={item.value}/>} keyExtractor={item => item.key} />
         </View>
     )
@@ -21,6 +20,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 15,
         width: 350,
         height: 150,
         borderRadius: 60
