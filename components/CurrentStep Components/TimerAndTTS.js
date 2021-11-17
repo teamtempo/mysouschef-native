@@ -21,11 +21,11 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
 
     useEffect(() => {
-        if (voiceResultsState === "stop") {
+        if (voiceResultsState.includes("stop")) {
             stopTimer();
             setVoiceResultsState("");
         }
-        if (voiceResultsState === "start") {
+        if (voiceResultsState.includes("start")) {
             startTimer();
             setVoiceResultsState("");
         

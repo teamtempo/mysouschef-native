@@ -15,7 +15,7 @@ function CurrentStep() {
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const [isLoading, setLoading] = useState(false)
     const [error, setError] = useState('');
-
+    const [blueberry, setBlueberry ]= useState("");
     //console.log(steps)
 
     //checking on the speech service
@@ -40,6 +40,7 @@ function CurrentStep() {
       }
       const onSpeechEndHandler = (e) => {
         setLoading(false)
+        setBlueberry("");
         console.log("stop handler", e)
       }
 
@@ -60,10 +61,11 @@ function CurrentStep() {
       }
     
       const startRecording = async () => {
+        setBlueberry("listening");
         setLoading(true)
         try {
             stopListener();
-            await Voice.start('en-Uk',{ RECOGNIZER_ENGINE: 'GOOGLE' })
+            await Voice.start('en-UK',{ RECOGNIZER_ENGINE: 'GOOGLE' })
         } catch (error) {
             console.log("error raised", error)
         }
@@ -228,8 +230,7 @@ function CurrentStep() {
                 return (
                     <View style={{width, alignItems: 'center'}}>
                         <View style={{ flex: 0.3, justifyContent: 'center'}}>
-                        <Button title="Press me to stop" onPress={stopRecording} />
-                        <Text style={{color: '#000000'}}>The voice results go here: {voiceResultsState}</Text>
+                            <Text style={{color:'#000000'}}>{blueberry}</Text>
                             <Text style={styles.stepInd}> Step { item.step } of {steps.length} </Text>
                         </View>
                         <View style={{ flex: 0.4 }}>

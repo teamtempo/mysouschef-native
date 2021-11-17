@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         textAlign: 'center',
         borderRadius: 10,
+        color:'#000000',
     },
     
 });
