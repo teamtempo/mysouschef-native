@@ -1,22 +1,15 @@
-import React, { useRef, useEffect,useState } from 'react'
-import { Animated, StyleSheet, View, FlatList, Dimensions, Text, ScrollView, Button } from 'react-native';
+import React, { useRef, useEffect } from 'react'
+import { Animated, StyleSheet, View, Dimensions, Text, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
-import { PorcupineManager } from '@picovoice/porcupine-react-native';
 import Voice from '@react-native-voice/voice';
-import { voiceResults } from '../atoms/VoiceResults';
+import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResultsHandler, createPorcupineManager, removeListeners } from '../helpers/reactvoice-helper';
 
 function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
-    const [steps, setSteps] = useRecoilState(stepsState);
-    //stores the results from the speech recognition    
-    const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
-    const [isLoading, setLoading] = useState(false)
-    const [error, setError] = useState('');
-    const [blueberry, setBlueberry ]= useState("");
-    //console.log(steps)
+    const [steps, setSteps] = useRecoilState(stepsState);  
 
     //checking on the speech service
     useEffect(async() => {
@@ -24,7 +17,6 @@ function CurrentStep() {
         console.log("voice check:", await Voice.isAvailable());
     },[]);
 
-    //VOICE RECOGNITION SECTION
     useEffect(() => {
         Voice.onSpeechStart = onSpeechStartHandler;
         Voice.onSpeechEnd = onSpeechEndHandler;
@@ -34,95 +26,6 @@ function CurrentStep() {
           Voice.destroy().then(Voice.removeAllListeners);
         }
       }, [])
-
-      const onSpeechStartHandler = (e) => {
-        console.log("start handler==>>>", e)
-      }
-      const onSpeechEndHandler = (e) => {
-        setLoading(false)
-        setBlueberry("");
-        console.log("stop handler", e)
-      }
-
-      const onSpeechError = (e) => {
-        console.log('onSpeechError: ', e);
-        addListener();
-        setError({
-          error: JSON.stringify(e.error),
-        });
-      };
-    
-      //add functionality here to call the function that will deal with the relevant action
-      const onSpeechResultsHandler = (e) => {
-        let text = e.value[0]
-        setVoiceResultsState(text)
-        addListener();
-        console.log("speech result handler", e)
-      }
-    
-      const startRecording = async () => {
-        setBlueberry("listening");
-        setLoading(true)
-        try {
-            stopListener();
-            await Voice.start('en-UK',{ RECOGNIZER_ENGINE: 'GOOGLE' })
-        } catch (error) {
-            console.log("error raised", error)
-        }
-      }
-    
-      const stopRecording = async () => {
-        try {
-          await Voice.stop()
-          console.log("stop")
-        } catch (error) {
-          console.log("error raised", error)
-        }
-      }
-
-    //VOICE RECOGNITION END
-
-    let porcupineManager;
-
-    async function createPorcupineManager() {
-        try {
-          
-          porcupineManager = await PorcupineManager.fromKeywords(
-            ["blueberry"],
-            detectionCallback)
-            addListener();
-            console.log(porcupineManager);
-            console.log("porcupine started")
-    
-        } catch(err) {
-          console.log(err);
-        }
-      }
-    
-      function detectionCallback(keyWordIndex) {
-        if(keyWordIndex === 0) {
-          console.log("blueberry detected")
-          startRecording();
-        } else if (keyWordIndex === 1) {
-          console.log("FUCK YOU porcupines")
-        }
-      }
-    
-      async function addListener() {
-        await porcupineManager.start();
-        console.log("started")
-      }
-    
-      async function stopListener() {
-        await porcupineManager.stop();
-        console.log("stopped")
-       
-      }
-    
-      async function removeListeners() {
-        await porcupineManager.delete();
-        console.log("deleted")
-      }
 
     useEffect(() => {
         createPorcupineManager();
@@ -230,7 +133,6 @@ function CurrentStep() {
                 return (
                     <View style={{width, alignItems: 'center'}}>
                         <View style={{ flex: 0.3, justifyContent: 'center'}}>
-                            <Text style={{color:'#000000'}}>{blueberry}</Text>
                             <Text style={styles.stepInd}> Step { item.step } of {steps.length} </Text>
                         </View>
                         <View style={{ flex: 0.4 }}>

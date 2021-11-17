@@ -7,6 +7,7 @@
  */
  import React from 'react';
  import { RecoilRoot } from 'recoil';
+ import RecoilOutside from "recoil-outside"
  
  import Dashboard from './components/Dashboard';
  import Preview from './components/Preview';
@@ -22,6 +23,7 @@
    return (
      <RecoilRoot>
        <NavigationContainer>
+      <RecoilOutside/>
          <Stack.Navigator>
            <Stack.Screen name="DashBoard" component={Dashboard} options={{ headerShown: false }} />
            <Stack.Screen name="Preview" component={Preview} options={{ headerShown: false }} />

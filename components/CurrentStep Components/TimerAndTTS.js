@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRecoilState } from 'recoil';
+import Tts from 'react-native-tts';
 
 import say from '../../helpers/tts-helper';
 
@@ -21,8 +22,8 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
 
     useEffect(() => {
-        if (voiceResultsState.includes("stop")
-        || voiceResultsState.includes("pause")) {
+        if (voiceResultsState.includes("stop timer")
+        || voiceResultsState.includes("pause timer")) {
             stopTimer();
             setVoiceResultsState("");
         }
@@ -33,9 +34,8 @@ const TimerAndTTS = ({step, instructions, time}) => {
             startTimer();
             setVoiceResultsState("");
         } 
-        if (voiceResultsState.includes("read")
-        || voiceResultsState.includes("instructions")
-        || voiceResultsState.includes("step")
+        if (voiceResultsState.includes("read instructions")
+        || voiceResultsState.includes("read step")
         || voiceResultsState.includes("read the instructions")) {
             speak();
             setVoiceResultsState("");
@@ -58,12 +58,11 @@ const TimerAndTTS = ({step, instructions, time}) => {
             resetTimer();
             setVoiceResultsState("");
         }
-        
-
-
+        if (voiceResultsState.includes('stop reading')) {
+            Tts.stop();
+            setVoiceResultsState("");
+        }
     },[voiceResultsState]);
-
-
 
     const speak = () => {
         say(`Step ${step}, ${instructions}`)
@@ -84,9 +83,6 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const resetTimer = () => {
         setRemainingSecs(time);
         setIsActive(false);
-        
-    
-       
     }
 
     const addTime = () => {
