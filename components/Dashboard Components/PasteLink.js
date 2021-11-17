@@ -54,6 +54,7 @@ function PasteLink( { navigation } ) {
             navigation.navigate('Preview')
             addHistory(url, `${res.data[0].title}`);
             setInitSteps(res.data.slice(1));
+            setURL("")
         }
     }
     
@@ -65,7 +66,7 @@ function PasteLink( { navigation } ) {
             placeholder='paste recipe url here'
             onChangeText={(val) => setURL(val)}/>
             <TouchableOpacity style={styles.button} onPress={fetchData}>
-            <Text style={{ color: '#000000' }}>GO</Text>
+                <Text style={{ color: '#000000' }}>GO</Text>
             </TouchableOpacity> 
         </View>
     )
