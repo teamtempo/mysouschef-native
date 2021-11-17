@@ -33,7 +33,6 @@ const Steps = () => {
         setModalInput(val * 60);
     }
 
-    //display minutes and seconds from timer which is in seconds
     const displayTimer = (timer) => {
         let minutes = Math.floor(timer / 60);
         let seconds = timer % 60;
