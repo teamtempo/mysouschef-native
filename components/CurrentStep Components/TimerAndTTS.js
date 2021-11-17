@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRecoilState } from 'recoil';
 
 import say from '../../helpers/tts-helper';
+
+import { voiceResults } from '../../atoms/VoiceResults';
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -15,6 +18,20 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const [remainingSecs, setRemainingSecs] = useState(time);
     const [isActive, setIsActive] = useState(false);
     const { minutes, seconds } = getRemaining(remainingSecs);
+    const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
+
+    useEffect(() => {
+        if (voiceResultsState === "stop") {
+            stopTimer();
+            setVoiceResultsState("");
+        }
+        if (voiceResultsState === "start") {
+            startTimer();
+            setVoiceResultsState("");
+        
+    }},[voiceResultsState]);
+
+
 
     const speak = () => {
         say(`Step ${step}, ${instructions}`)
@@ -23,10 +40,21 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const toggleTimer = () => {
         setIsActive(!isActive);
       }
+
+    const startTimer = () => {
+        setIsActive(true);
+      }
+
+    const stopTimer = () => {
+        setIsActive(false);
+    }
     
     const resetTimer = () => {
         setRemainingSecs(time);
         setIsActive(false);
+        
+    
+       
     }
 
     const addTime = () => {

@@ -5,13 +5,14 @@ import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
 import { PorcupineManager } from '@picovoice/porcupine-react-native';
 import Voice from '@react-native-voice/voice';
+import { voiceResults } from '../atoms/VoiceResults';
 
 function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
     const [steps, setSteps] = useRecoilState(stepsState);
     //stores the results from the speech recognition    
-    const [result, setResult] = useState('')
+    const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const [isLoading, setLoading] = useState(false)
     const [error, setError] = useState('');
 
@@ -44,6 +45,7 @@ function CurrentStep() {
 
       const onSpeechError = (e) => {
         console.log('onSpeechError: ', e);
+        addListener();
         setError({
           error: JSON.stringify(e.error),
         });
@@ -52,7 +54,7 @@ function CurrentStep() {
       //add functionality here to call the function that will deal with the relevant action
       const onSpeechResultsHandler = (e) => {
         let text = e.value[0]
-        setResult(text)
+        setVoiceResultsState(text)
         addListener();
         console.log("speech result handler", e)
       }
@@ -227,7 +229,7 @@ function CurrentStep() {
                     <View style={{width, alignItems: 'center'}}>
                         <View style={{ flex: 0.3, justifyContent: 'center'}}>
                         <Button title="Press me to stop" onPress={stopRecording} />
-                        <Text style={{color: '#000000'}}>The voice results go here: {result}</Text>
+                        <Text style={{color: '#000000'}}>The voice results go here: {voiceResultsState}</Text>
                             <Text style={styles.stepInd}> Step { item.step } of {steps.length} </Text>
                         </View>
                         <View style={{ flex: 0.4 }}>
