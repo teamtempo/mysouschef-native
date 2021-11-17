@@ -36,7 +36,7 @@ const Steps = () => {
     const displayTimer = (timer) => {
         let minutes = Math.floor(timer / 60);
         let seconds = timer % 60;
-        let time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        let time = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         return <Text style={{color: '#000000'}}>{time}</Text>
     }
     
