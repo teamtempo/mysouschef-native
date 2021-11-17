@@ -9,9 +9,11 @@ import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResult
 function CurrentStep() {
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
-    const [steps, setSteps] = useRecoilState(stepsState);  
 
-    //checking on the speech service
+    const [steps, setSteps] = useRecoilState(stepsState);
+    const flatListRef = useRef();
+
+    // checking on the speech service
     useEffect(async() => {
         console.log("voice check:", await Voice.getSpeechRecognitionServices());
         console.log("voice check:", await Voice.isAvailable());
@@ -31,7 +33,7 @@ function CurrentStep() {
         createPorcupineManager();
         return () => {
             removeListeners();
-    }
+      }
     }, [])
        
     const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82'];
@@ -112,13 +114,19 @@ function CurrentStep() {
                 }
             ]
         }}/>
+    }   
+
+    const scrollToIndex = (i) => {
+      flatListRef.current.scrollToIndex({index: i});
     }
     
     return (
         <View style={styles.container}>
             <Backdrop scrollX={scrollX}/>
             <Square scrollX={scrollX}/>
-            <Animated.FlatList data={steps}
+            <Animated.FlatList 
+            data={steps}
+            ref={flatListRef}
             keyExtractor={item => item.step}
             horizontal
             scrollEventThrottle={32}
@@ -129,7 +137,7 @@ function CurrentStep() {
             contentContainerStyle={{paddingBottom: 100}}
             showsHorizontalScrollIndicator={false}
             pagingEnabled
-            renderItem={({item}) => {
+            renderItem={({item, index}) => {
                 return (
                     <View style={{width, alignItems: 'center'}}>
                         <View style={{ flex: 0.3, justifyContent: 'center'}}>
@@ -140,7 +148,7 @@ function CurrentStep() {
                             <Text style={styles.deets}> { item.details }</Text>
                             </ScrollView>
                         </View>
-                        <TimerAndTTS step={item.step} instructions={item.details} time={item.timer}/>
+                        <TimerAndTTS step={item.step} instructions={item.details} time={item.timer} index={index} scrollToIndex={scrollToIndex}/>
                     </View>
                 )
             }}/>
