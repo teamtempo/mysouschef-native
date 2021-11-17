@@ -1,23 +1,33 @@
-import React, { useState }from 'react'
+import React, { useRef, useEffect }from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { pastLinks } from '../../atoms/PastLinks';
 import { clickedRecipe } from '../../atoms/ClickedRecipe';
+
+import axios from 'axios'
 import { useRecoilState } from 'recoil';
+import { stepsState } from '../../atoms/Steps';
+
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const HistoryItem = ({item}) => {
-
+const HistoryItem = ({navigation, item}) => {
     const [links, setLinks] = useRecoilState(pastLinks);
+    const [initSteps, setInitSteps] = useRecoilState(stepsState);
+    const steps = useRef(initSteps)
     const [clickedLink, setclickedLink] = useRecoilState(clickedRecipe);
 
-    const getLink = () => {
+    useEffect(() => {
+        steps.current = initSteps
+    }, [initSteps])
+    
+    async function getLink() {
         let clickedItem = links.find(link => link.value === item);
-        console.log(clickedItem);
         let link = clickedItem.key.slice(1);
-        console.log(link)
         setclickedLink(link); 
+        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}`);
+        navigation.navigate('Preview')  
+        setInitSteps(res.data.slice(1));
     }
 
     async function deleteLink() {

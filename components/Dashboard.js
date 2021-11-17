@@ -122,7 +122,7 @@ function Dashboard({ navigation }) {
                                     <PasteLink navigation={navigation}/>
                                 </View>
                                 <View style={styles.item}>
-                                    <History />
+                                    <History navigation={navigation}/>
                                 </View>
                             </View>
                         </View>
