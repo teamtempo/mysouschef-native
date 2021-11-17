@@ -42,7 +42,7 @@ function PasteLink( { navigation } ) {
         } else if (res.data === "No recipe found on page") {
             alert("No recipe found on page, try another recipe")
         } else if (res.data.includes("url provided must include")) {
-            alert("The url provided must include http:// or https://")
+            alert("The url provided must include http:// or https://")  
         } else {
             navigation.navigate('Preview')
             addHistory(url, `${res.data[0].title}`);

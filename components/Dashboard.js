@@ -1,7 +1,7 @@
 import {useRecoilState} from 'recoil';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect } from 'react'
-import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, ScrollView } from 'react-native';
+import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
 
 import Instructions from './Dashboard Components/Instructions';
 import PasteLink from './Dashboard Components/PasteLink';
