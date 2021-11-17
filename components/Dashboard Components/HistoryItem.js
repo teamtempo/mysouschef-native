@@ -4,14 +4,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { pastLinks } from '../../atoms/PastLinks';
 
 import axios from 'axios'
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HistoryItem = ({navigation, item}) => {
-    const [links, setLinks] = useRecoilState(pastLinks);
+    const links = useRecoilValue(pastLinks);
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
 
