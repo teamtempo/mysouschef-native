@@ -3,9 +3,12 @@ import { StyleSheet, Text, View, Button, ScrollView, TextInput, TouchableOpacity
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../../atoms/Steps'
 import Modal from "react-native-modal";
+import { WheelPicker } from "react-native-wheel-picker-android";
 
 
 const Steps = () => {
+
+    let timePickerData = [...Array(61).keys()].map(i => i.toString());
 
     const [steps, setSteps] = useRecoilState(stepsState);
     const [modalVisible, setModalVisible] = useState(false);
@@ -14,6 +17,9 @@ const Steps = () => {
     const [modalDetails, setModalDetails] = useState();
     const [modalstep, setModalstep] = useState();
     const [index, setIndex] = useState(0);
+    const [selectedMinute, setSelectedMinute] = useState(0);
+    const [selectedSecond, setSelectedSecond] = useState(0);
+
 
     const editTimer = (index) => {
         setModalVisible(true);
@@ -27,6 +33,13 @@ const Steps = () => {
         setModalInput(val * 60);
     }
 
+    //display minutes and seconds from timer which is in seconds
+    const displayTimer = (timer) => {
+        let minutes = Math.floor(timer / 60);
+        let seconds = timer % 60;
+        let time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        return <Text style={{color: '#000000'}}>{time}</Text>
+    }
     
     const saveTimer = () => {
         const newList = replaceItemAtIndex(steps, index, {
@@ -37,7 +50,18 @@ const Steps = () => {
         });
         setModalVisible(false);
         setSteps(newList);
+        console.log("clicked");
     };
+
+    let onMinuteSelected = selectedItem => {
+        setSelectedMinute(selectedItem);
+        setModalInput(selectedItem * 60);
+      };
+    
+    let onSecondSelected = selectedItem => {
+        setModalInput(modalInput + selectedItem)
+      };
+    
 
 
     return ( 
@@ -49,7 +73,7 @@ const Steps = () => {
                     <View style={styles.overview}>
                         <View style={styles.stepNumber}>
                             <Text style={{fontWeight:"bold", fontSize: 18, color: '#000000'}}> Step {step.step} </Text>
-                            <Text style={{color: '#000000'}}> {step.timer / 60} minutes </Text>
+                            <Text style={{color: '#000000'}}> {displayTimer(step.timer)} minutes </Text>
                         </View>
                         <View style={styles.timerbtn}>
                             <TouchableOpacity onPress={() => {editTimer(index)}}>
@@ -62,10 +86,19 @@ const Steps = () => {
                     </View>
                     <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
                         <View style={{ flex:1}}>
-                            <View style={styles.modal}>
-                                <TextInput style={styles.modalinput} onChangeText={modalInputHandler}>{modalTimer}</TextInput>
-                                <Button style={styles.modalbutton} title="edit Timer" onPress={() => {saveTimer()}}/>
-                            </View>
+                        </View>
+                        <View style={styles.modal}>
+                            <WheelPicker
+                            selectedItem={selectedMinute}
+                            data={timePickerData}
+                            onItemSelected={onMinuteSelected}
+                            />
+                            <WheelPicker
+                            selectedItem={selectedSecond}
+                            data={timePickerData}
+                            onItemSelected={onSecondSelected}
+                            />
+                            <Button style={styles.modalbutton} title="edit Timer" onPress={() => {saveTimer()}}/>
                         </View>
                     </Modal>
                 </View>
@@ -124,7 +157,7 @@ const styles = StyleSheet.create({
         padding:40, 
         borderRadius:20, 
         alignContent: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     modalbutton: {
         flex: 1,

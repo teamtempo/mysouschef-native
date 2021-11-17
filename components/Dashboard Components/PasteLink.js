@@ -53,7 +53,7 @@ function PasteLink( { navigation } ) {
         } else {
             navigation.navigate('Preview')
             addHistory(url, `${res.data[0].title}`);
-            setInitSteps(res.data.slice(1));
+            setInitSteps(res.data.slice(2));
         }
     }
     
