@@ -18,6 +18,7 @@ function storeData(key, value) {
 }
 
 function PasteLink( { navigation } ) {
+    const textInput = useRef();
     const [url, setURL] = useState()
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
@@ -54,7 +55,7 @@ function PasteLink( { navigation } ) {
             navigation.navigate('Preview')
             addHistory(url, `${res.data[0].title}`);
             setInitSteps(res.data.slice(1));
-            setURL("")
+            textInput.current.clear();
         }
     }
     
@@ -62,8 +63,10 @@ function PasteLink( { navigation } ) {
         <View style={styles.container}>
             <TextInput 
             value={url}
+            ref={textInput}
             style={styles.input}
             placeholder='paste recipe url here'
+            onPressIn={() => textInput.current.clear()}
             onChangeText={(val) => setURL(val)}/>
             <TouchableOpacity style={styles.button} onPress={fetchData}>
                 <Text style={{ color: '#000000' }}>GO</Text>
