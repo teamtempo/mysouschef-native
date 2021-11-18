@@ -47,10 +47,10 @@ const HistoryItem = ({navigation, item}) => {
             
             <View style={styles.icons}>
                 <TouchableOpacity onPress={getLink}>
-                        <Icon name="check-circle" size={20} color="#9AD3BB"/>
+                        <Icon name="check-circle" size={25} color="#9AD3BB"/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={deleteLink} style={{marginLeft: 10}}>
-                    <Icon name="trash" size={20} color="#9AD3BB"/>
+                    <Icon name="trash" size={25} color="#9AD3BB"/>
                 </TouchableOpacity>
             </View>
           
