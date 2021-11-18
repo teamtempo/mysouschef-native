@@ -40,9 +40,59 @@ const Steps = () => {
         let hours = Math.floor(timer / 3600);
         let minutes = Math.floor((timer - hours * 3600) / 60);
         let seconds = timer % 60;
-        let time = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        return <Text style={{color: '#000000'}}>{time}</Text>
-    }
+        let time;
+        if (hours > 0 && minutes > 0 && seconds > 0) {
+            if (hours === 1 && minutes === 1 && seconds === 1) {
+            time = `${hours} hour, ${minutes} minute and ${seconds} second`;
+            } else if (hours === 1 && minutes === 1 && seconds > 1) {
+            time = `${hours} hour, ${minutes} minute and ${seconds} seconds`;
+            } else if (hours === 1 && minutes > 1 && seconds > 1) {
+            time = `${hours} hour, ${minutes} minutes and ${seconds} seconds`;
+            } else if (hours === 1 && minutes > 1 && seconds === 1) {
+            time = `${hours} hour, ${minutes} minutes and ${seconds} second`;
+            } else if (hours > 1 && minutes === 1 && seconds === 1) {
+            time = `${hours} hours, ${minutes} minute and ${seconds} second`;
+            } else if (hours > 1 && minutes === 1 && seconds > 1) {
+            time = `${hours} hours, ${minutes} minute and ${seconds} seconds`;
+            } else if (hours > 1 && minutes > 1 && seconds === 1) {
+            time = `${hours} hours, ${minutes} minutes and ${seconds} second`;
+            } else if (hours > 1 && minutes > 1 && seconds > 1) {
+            time = `${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+            }
+        } else if (hours > 0 && minutes > 0 && seconds === 0) {
+            if (hours === 1 && minutes === 1) {
+                time = `${hours} hour and ${minutes} minute`;
+            } else if (hours === 1 && minutes > 1) {
+                time = `${hours} hour and ${minutes} minutes`;
+            } else if (hours > 1 && minutes === 1) {
+                time = `${hours} hours and ${minutes} minute`;
+            } else if (hours > 1 && minutes > 1) {
+                time = `${hours} hours and ${minutes} minutes`;
+            }
+        } else if (minutes > 0 && hours === 0 && seconds === 0) {
+            if (minutes === 1) {
+                time = `${minutes} minute`;
+            } else {
+            time = `${minutes} minutes`;
+            }
+        } else if (minutes > 0 && hours === 0 && seconds > 0) {
+            if (minutes === 1) {
+                time = `${minutes} minute and ${seconds} seconds`;
+            } else {
+                time = `${minutes} minutes and ${seconds} seconds`;
+            }
+        } else if (hours > 0 && minutes === 0 && seconds === 0) {
+            if (hours === 1) {
+                time = `${hours} hour`;
+            } else {
+                time = `${hours} hours`;
+            }
+        } else if (hours === 0 && minutes === 0 && seconds === 0) {
+            time = "No timer provided";
+        }
+    return <Text style={{color: '#000000'}}>{time}</Text>
+}
+
 
     const saveTimer = () => {
         const newList = replaceItemAtIndex(steps, index, {
@@ -75,7 +125,7 @@ const Steps = () => {
                     <View style={styles.overview}>
                         <View style={styles.stepNumber}>
                             <Text style={{fontWeight:"bold", fontSize: 18, color: '#000000'}}> Step {step.step} </Text>
-                            <Text style={{color: '#000000'}}> {displayTimer(step.timer)} minutes </Text>
+                            <Text style={{color: '#000000'}}> {displayTimer(step.timer)}</Text>
                         </View>
                         <View style={styles.timerbtn}>
                             <TouchableOpacity onPress={() => {editTimer(index)}}>
@@ -107,8 +157,8 @@ const Steps = () => {
                             
                            
                         </View>
-                        <TouchableOpacity style={{backgroundColor: "#9AD3BB", height: 40, alignItems: 'center', borderRadius: 20}}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold'}}onPress={() => {saveTimer()}}> save </Text>
+                        <TouchableOpacity style={{backgroundColor: "#9AD3BB", height: 36, alignItems: 'center', borderRadius: 20, marginTop: 5}}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold'}}onPress={() => {saveTimer()}}>Save timer</Text>
                         </TouchableOpacity>
                     </Modal>
                 </View>
