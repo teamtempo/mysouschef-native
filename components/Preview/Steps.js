@@ -3,31 +3,97 @@ import { StyleSheet, Text, View, Button, ScrollView, TextInput, TouchableOpacity
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../../atoms/Steps'
 import Modal from "react-native-modal";
+import { WheelPicker } from "react-native-wheel-picker-android";
 
 
 const Steps = () => {
 
+    let hourPicker = [...Array(25).keys()].map(i => i.toString());
+    let minutePicker = [...Array(61).keys()].map(i => i.toString());
+
     const [steps, setSteps] = useRecoilState(stepsState);
     const [modalVisible, setModalVisible] = useState(false);
-    const [modalTimer, setModalTimer] = useState();
+    const [modalHour, setModalHour] = useState();
+    const [modalMinute, setModalMinute] = useState();
     const [modalInput, setModalInput] = useState();
     const [modalDetails, setModalDetails] = useState();
     const [modalstep, setModalstep] = useState();
     const [index, setIndex] = useState(0);
-
+    const [selectedHour, setSelectedHour] = useState(0);
+    const [selectedMinute, setSelectedMinute] = useState(0);
+    
     const editTimer = (index) => {
+        let hours = Math.floor(steps[index].timer / 3600);
+        let minutes = Math.floor((steps[index].timer - hours * 3600) / 60)
+        
+        setModalHour(hours);
+        setModalMinute(minutes);
+
         setModalVisible(true);
         setModalstep(steps[index].step);
-        setModalTimer(steps[index].timer / 60);  
+       
         setModalDetails(steps[index].details);
         setIndex(index);
     }
 
-    const modalInputHandler = (val) => {
-        setModalInput(val * 60);
-    }
+    const displayTimer = (timer) => {
+        let hours = Math.floor(timer / 3600);
+        let minutes = Math.floor((timer - hours * 3600) / 60);
+        let seconds = timer % 60;
+        let time;
+        if (hours > 0 && minutes > 0 && seconds > 0) {
+            if (hours === 1 && minutes === 1 && seconds === 1) {
+            time = `${hours} hour, ${minutes} minute and ${seconds} second`;
+            } else if (hours === 1 && minutes === 1 && seconds > 1) {
+            time = `${hours} hour, ${minutes} minute and ${seconds} seconds`;
+            } else if (hours === 1 && minutes > 1 && seconds > 1) {
+            time = `${hours} hour, ${minutes} minutes and ${seconds} seconds`;
+            } else if (hours === 1 && minutes > 1 && seconds === 1) {
+            time = `${hours} hour, ${minutes} minutes and ${seconds} second`;
+            } else if (hours > 1 && minutes === 1 && seconds === 1) {
+            time = `${hours} hours, ${minutes} minute and ${seconds} second`;
+            } else if (hours > 1 && minutes === 1 && seconds > 1) {
+            time = `${hours} hours, ${minutes} minute and ${seconds} seconds`;
+            } else if (hours > 1 && minutes > 1 && seconds === 1) {
+            time = `${hours} hours, ${minutes} minutes and ${seconds} second`;
+            } else if (hours > 1 && minutes > 1 && seconds > 1) {
+            time = `${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+            }
+        } else if (hours > 0 && minutes > 0 && seconds === 0) {
+            if (hours === 1 && minutes === 1) {
+                time = `${hours} hour and ${minutes} minute`;
+            } else if (hours === 1 && minutes > 1) {
+                time = `${hours} hour and ${minutes} minutes`;
+            } else if (hours > 1 && minutes === 1) {
+                time = `${hours} hours and ${minutes} minute`;
+            } else if (hours > 1 && minutes > 1) {
+                time = `${hours} hours and ${minutes} minutes`;
+            }
+        } else if (minutes > 0 && hours === 0 && seconds === 0) {
+            if (minutes === 1) {
+                time = `${minutes} minute`;
+            } else {
+            time = `${minutes} minutes`;
+            }
+        } else if (minutes > 0 && hours === 0 && seconds > 0) {
+            if (minutes === 1) {
+                time = `${minutes} minute and ${seconds} seconds`;
+            } else {
+                time = `${minutes} minutes and ${seconds} seconds`;
+            }
+        } else if (hours > 0 && minutes === 0 && seconds === 0) {
+            if (hours === 1) {
+                time = `${hours} hour`;
+            } else {
+                time = `${hours} hours`;
+            }
+        } else if (hours === 0 && minutes === 0 && seconds === 0) {
+            time = "No timer provided";
+        }
+    return <Text style={{color: '#000000'}}>{time}</Text>
+}
 
-    
+
     const saveTimer = () => {
         const newList = replaceItemAtIndex(steps, index, {
         ...steps,
@@ -40,6 +106,16 @@ const Steps = () => {
     };
 
 
+    let onHourSelected = selectedItem => {
+        setSelectedHour(selectedItem);
+        setModalInput(selectedItem * 3600 + selectedMinute * 60);
+    };
+    
+    let onMinuteSelected = selectedItem => {
+        setSelectedMinute(selectedItem);
+        setModalInput(selectedHour * 3600 + selectedItem * 60);
+    };
+    
     return ( 
          
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -49,7 +125,7 @@ const Steps = () => {
                     <View style={styles.overview}>
                         <View style={styles.stepNumber}>
                             <Text style={{fontWeight:"bold", fontSize: 18, color: '#000000'}}> Step {step.step} </Text>
-                            <Text style={{color: '#000000'}}> {step.timer / 60} minutes </Text>
+                            <Text style={{color: '#000000'}}> {displayTimer(step.timer)}</Text>
                         </View>
                         <View style={styles.timerbtn}>
                             <TouchableOpacity onPress={() => {editTimer(index)}}>
@@ -61,12 +137,29 @@ const Steps = () => {
                         <Text style={{color: '#000000'}}> {step.details} </Text>
                     </View>
                     <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
-                        <View style={{ flex:1}}>
-                            <View style={styles.modal}>
-                                <TextInput style={styles.modalinput} onChangeText={modalInputHandler}>{modalTimer}</TextInput>
-                                <Button style={styles.modalbutton} title="edit Timer" onPress={() => {saveTimer()}}/>
-                            </View>
+                        <View style={styles.modal}>
+                           
+                            <WheelPicker
+                            style={{height: 130, flex: 1}}
+                            initPosition={modalHour}
+                            selectedItem={selectedHour}
+                            data={hourPicker}
+                            onItemSelected={onHourSelected}
+                            />
+
+                            <WheelPicker
+                            style={{height: 130,flex: 1}}
+                            initPosition={modalMinute}
+                            selectedItem={selectedMinute}
+                            data={minutePicker}
+                            onItemSelected={onMinuteSelected}
+                            />
+                            
+                           
                         </View>
+                        <TouchableOpacity style={{backgroundColor: "#9AD3BB", height: 36, alignItems: 'center', borderRadius: 20, marginTop: 5}}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold'}}onPress={() => {saveTimer()}}>Save timer</Text>
+                        </TouchableOpacity>
                     </Modal>
                 </View>
             )
@@ -119,12 +212,14 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 30
     },
     modal: {
+        flexDirection: 'row',
         backgroundColor: "white", 
-        margin:50,
-        padding:40, 
+        margin:0,
+        padding:0, 
         borderRadius:20, 
+        borderColor: '#F5B463',
+        borderWidth: 2,
         alignContent: 'center',
-        flexDirection: 'column'
     },
     modalbutton: {
         flex: 1,
