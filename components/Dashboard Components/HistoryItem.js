@@ -6,6 +6,7 @@ import { pastLinks } from '../../atoms/PastLinks';
 import axios from 'axios'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
+import { ingredientsState } from '../../atoms/Ingredients';
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,9 +16,17 @@ const HistoryItem = ({navigation, item}) => {
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
 
+    const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
+    const ingredients = useRef(initIngredients)
+
     useEffect(() => {
         steps.current = initSteps
     }, [initSteps])
+
+    useEffect(() => {
+        ingredients.current = initIngredients
+    }, [initIngredients])
+
     
     async function getLink() {
         let clickedItem = links.find(link => link.value === item);
@@ -25,6 +34,7 @@ const HistoryItem = ({navigation, item}) => {
         const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}`);
         navigation.navigate('Preview')  
         setInitSteps(res.data.slice(2));
+        setInitIngredients(res.data[1])
     }
 
     async function deleteLink() {
