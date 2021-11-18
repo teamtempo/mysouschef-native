@@ -41,20 +41,19 @@ const HistoryItem = ({navigation, item}) => {
     return (
         
         <View style={ styles.container }>
-            <View>
-                <Text style={styles.text}>{item}</Text>
-            </View>
-            
             <View style={styles.icons}>
-                <TouchableOpacity onPress={getLink}>
-                        <Icon name="check-circle" size={25} color="#9AD3BB"/>
-                </TouchableOpacity>
                 <TouchableOpacity onPress={deleteLink} style={{marginLeft: 10}}>
                     <Icon name="trash" size={25} color="#9AD3BB"/>
                 </TouchableOpacity>
             </View>
-          
-                
+            <View>
+                <Text style={styles.text}>{item}</Text>
+            </View>
+            <View style={styles.icons}>
+                <TouchableOpacity onPress={getLink}>
+                        <Icon name="check-circle" size={25} color="#9AD3BB"/>
+                </TouchableOpacity>
+            </View>
         </View>
             
     ) 

@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 50,
         height: 400,
-        borderTopStartRadius: 60
+        borderTopStartRadius: 30
     },
     item: {
         marginTop: 20,
