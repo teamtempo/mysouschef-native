@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Modal from "react-native-modal";
 import { instructionsModal } from '../../atoms/InstructionsModal';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import { useRecoilState } from 'recoil';
 import { continueClicked } from '../../atoms/ContinueClicked';
 
@@ -135,8 +135,8 @@ const Instructions = ( {continueClicked} ) => {
                             </Text>
                             </View>   
                         </View>
-                        <TouchableOpacity style={{backgroundColor: "#9AD3BB", height: 40, alignItems: 'center', borderRadius: 20, marginTop: 3}}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold'}} onPress={() => {nextScreen()}}>Continue</Text>
+                        <TouchableOpacity onPress={() => nextScreen()} style={{backgroundColor: "#9AD3BB", height: 40, alignItems: 'center', borderRadius: 20, marginTop: 3}}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold'}} >Continue</Text>
                         </TouchableOpacity>
         </Modal>
         </View>
