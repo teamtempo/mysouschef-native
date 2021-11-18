@@ -18,7 +18,7 @@ const Steps = () => {
     const editTimer = (index) => {
         setModalVisible(true);
         setModalstep(steps[index].step);
-        setModalTimer(steps[index].timer / 60);
+        setModalTimer(steps[index].timer / 60);  
         setModalDetails(steps[index].details);
         setIndex(index);
     }
@@ -78,8 +78,8 @@ const Steps = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#F3EAC1',
+        flexGrow: 1,
+        backgroundColor: '#F3EAC1'
     },
     step: {
         padding: 20
@@ -155,35 +155,3 @@ function replaceItemAtIndex(arr, index, newValue) {
     return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
 }
 export default Steps;
-
-// listContainer: {
-//     flexDirection: 'row',
-//     backgroundColor: '#FECF82',
-//     flex: 1,
-//     marginLeft: 10,
-//     marginRight: 10,
-//     borderRadius: 20,
-// },
-// stepText: {
-//     flex: 1,
-//     borderRadius: 20,
-//     alignItems: 'center',
-//     padding: 10,
-//     backgroundColor: "#F9A65C",
-// },
-// timerbutton: {
-//     flex: 1,
-//     alignItems: "center",
-//     backgroundColor: "#F9A65C",
-//     padding: 10,
-//     marginLeft: 10,
-//     borderRadius: 20,
-// },
-// details: {
-//     flex: 1,
-//     marginLeft: 10,
-//     marginRight: 10,
-//     padding: 10,
-//     backgroundColor: '#FECF82',
-//     borderRadius: 20,
-// },
