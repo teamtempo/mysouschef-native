@@ -42,7 +42,7 @@ const Steps = () => {
 
     return ( 
          
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {steps.map((step, index) => {
             return (
                 <View key={index} style={styles.step}>

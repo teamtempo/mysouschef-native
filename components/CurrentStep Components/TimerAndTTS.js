@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import Tts from 'react-native-tts';
 
 import say from '../../helpers/tts-helper';
@@ -148,14 +150,14 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             <View style={{flex: 0.6, marginTop: 40}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
                     <TouchableOpacity style={styles.timerIcon} onPress={subtractTime}>
-                        <Text style={{fontSize: 20}}> - </Text>
+                        <Icon name="minus-circle" size={40} color="#9AD3BB"/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.adjustTimer} onPress={resetTimer}>
                         <Text style={{fontSize: 15, color: '#000000'}}> Reset </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.timerIcon} onPress={addTime}>
-                        <Text style={{fontSize: 20, color: '#000000'}}> + </Text>
-                    </TouchableOpacity>
+                        <Icon name="plus-circle" size={40} color="#9AD3BB"/> 
+                    </TouchableOpacity>  
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     <TouchableOpacity style={styles.resumebtn} onPress={toggleTimer}>
@@ -196,11 +198,11 @@ const styles = StyleSheet.create({
     },
     timerIcon: {
         justifyContent: 'center',
-        backgroundColor: '#9AD3BB',
+        backgroundColor: 'white',
         alignItems: 'center',
-        width: 30,
-        height: 30,
-        borderRadius: 40
+        width: 40,
+        height: 40,
+        borderRadius: 30
     }
 });
 

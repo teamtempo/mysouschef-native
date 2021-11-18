@@ -30,7 +30,7 @@ function CurrentStep() {
           Voice.destroy().then(Voice.removeAllListeners);
         }
       }, [])
-
+   
     useEffect(() => {
         createPorcupineManager();
         return () => {
@@ -38,7 +38,7 @@ function CurrentStep() {
       }
     }, [])
        
-    const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82'];
+    const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52'];
 
     const Indicator=({scrollX}) => {
         return <View style={{position: 'absolute', bottom: 80, flexDirection: 'row'}}>
