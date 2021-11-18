@@ -12,10 +12,10 @@ function Preview( { navigation } ) {
         <View style={styles.main}>
             <Text style={styles.title}>Recipe</Text>
         </View>
-        <ScrollView>
-            <Ingredients />
-            <Steps />
-        </ScrollView>
+            <ScrollView showsVerticalScrollIndicator={true}>
+                <Ingredients />
+                <Steps />
+            </ScrollView>
         <View style={styles.main}>
             <TouchableOpacity onPress={() => navigation.navigate('CurrentStep')} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
