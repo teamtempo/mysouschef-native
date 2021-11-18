@@ -56,7 +56,7 @@ async function onSpeechError(e) {
 };
 
 async function onSpeechResultsHandler(e) {
-  let text = e.value[0]
+  let text = e.value[0].toLowerCase();
   await promiseSetRecoil(voiceResults, text)
   addListener();
   console.log("speech result handler", e)

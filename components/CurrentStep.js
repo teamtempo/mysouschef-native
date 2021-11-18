@@ -1,12 +1,14 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 import { Animated, StyleSheet, View, Dimensions, Text, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
 import Voice from '@react-native-voice/voice';
+import { currentStepIndex } from '../atoms/CurrentStepIndex';
 import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResultsHandler, createPorcupineManager, removeListeners } from '../helpers/voice-helper';
 
 function CurrentStep() {
+    const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
 
@@ -117,7 +119,16 @@ function CurrentStep() {
     }   
 
     const scrollToIndex = (i) => {
-      flatListRef.current.scrollToIndex({index: i});
+        flatListRef.current.scrollToIndex({index: i});
+        //console.log(getNativeScrollRef());
+    }
+
+    const _onViewableItemsChanged = useCallback(({ viewableItems, changed }) => {
+        setCurrentIndex(viewableItems[0].index)
+      },[]);
+
+    const _viewabilityConfig = {
+        itemVisiblePercentThreshold: 50
     }
     
     return (
@@ -126,6 +137,8 @@ function CurrentStep() {
             <Square scrollX={scrollX}/>
             <Animated.FlatList 
             data={steps}
+            onViewableItemsChanged={_onViewableItemsChanged}
+            viewabilityConfig={_viewabilityConfig}
             ref={flatListRef}
             keyExtractor={item => item.step}
             horizontal

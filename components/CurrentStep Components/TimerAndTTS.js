@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Tts from 'react-native-tts';
 
 import say from '../../helpers/tts-helper';
 
 import { voiceResults } from '../../atoms/VoiceResults';
+import { stepsState } from '../../atoms/Steps';
+import { currentStepIndex } from '../../atoms/CurrentStepIndex';
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -16,57 +18,77 @@ const getRemaining = (time) => {
 }
 
 const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
+    const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const [remainingSecs, setRemainingSecs] = useState(time);
     const [isActive, setIsActive] = useState(false);
     const { minutes, seconds } = getRemaining(remainingSecs);
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
-
+    const steps = useRecoilValue(stepsState);
+    
     useEffect(() => {
-        if (voiceResultsState.includes("stop timer")
-        || voiceResultsState.includes("pause timer")) {
-            stopTimer();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("start") 
-        || voiceResultsState.includes("go")
-        || voiceResultsState.includes("begin")
-        || voiceResultsState.includes("resume")) {
-            startTimer();
-            setVoiceResultsState("");
-        } 
-        if (voiceResultsState.includes("read instructions")
-        || voiceResultsState.includes("read step")
-        || voiceResultsState.includes("read the instructions")) {
-            speak();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("extend")
-        || voiceResultsState.includes("add")
-        || voiceResultsState.includes("increase")
-        || voiceResultsState.includes("more")) {
-            addTime();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("subtract")
-        || voiceResultsState.includes("decrease")
-        || voiceResultsState.includes("reduce")) {
-            subtractTime();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("reset")
-        || voiceResultsState.includes("restart")) {
-            resetTimer();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes('stop reading')) {
-            Tts.stop();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("next")) {
-            scrollToIndex(index + 1)
-            setVoiceResultsState("");
-        }
+        voiceController();
     },[voiceResultsState]);
+    
+    const voiceController = () => {
+        if (currentIndex === index) {
+            if (voiceResultsState.includes("stop timer")
+            || voiceResultsState.includes("pause timer")) {
+                stopTimer();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("start") 
+            || voiceResultsState.includes("go")
+            || voiceResultsState.includes("begin")
+            || voiceResultsState.includes("resume")) {
+                startTimer();
+                setVoiceResultsState("");
+            } 
+            if (voiceResultsState.includes("read instructions")
+            || voiceResultsState.includes("read step")
+            || voiceResultsState.includes("read the instructions")) {
+                console.log(step, instructions)
+               speak();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("extend")
+            || voiceResultsState.includes("add")
+            || voiceResultsState.includes("increase")
+            || voiceResultsState.includes("more")) {
+                addTime();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("subtract")
+            || voiceResultsState.includes("decrease")
+            || voiceResultsState.includes("reduce")) {
+                subtractTime();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("reset")
+            || voiceResultsState.includes("restart")) {
+                resetTimer();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes('stop reading')) {
+                Tts.stop();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("next step")) {
+                if (index+1 < steps.length) {
+                    setCurrentIndex(index+1);
+                    scrollToIndex(index + 1)
+                    setVoiceResultsState("");
+                }
+            }
+            if (voiceResultsState.includes("previous step")) {
+                if (index-1 !== 0) {
+                    setCurrentIndex(index-1);
+                    scrollToIndex(index - 1)
+                    setVoiceResultsState("");
+                }
+
+            }
+        }
+    }
 
     const speak = () => {
         say(`Step ${step}, ${instructions}`)
