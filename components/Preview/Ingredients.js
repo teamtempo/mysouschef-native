@@ -38,7 +38,7 @@ const Ingredients = () => {
                 <View style={styles.list}>
                    {ingredientsList.ingredients.map((item, index) => {
                        return (
-                           <Text key={index} style={styles.listText}> { item } </Text>
+                             <Text key={index} style={styles.listText}> { item } </Text>
                        )
                    })}
                </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         backgroundColor: '#9AD3BB',
         borderRadius: 30,
-        padding: 10,
+        padding: 15,
         overflow: 'hidden'
     },
     card: {
@@ -71,8 +71,7 @@ const styles = StyleSheet.create({
         fontWeight: "900"
     },
     list: {
-        paddingTop: 20,
-        padding: 10
+        paddingTop: 15,
     },
     listText: {
         color: 'black',
