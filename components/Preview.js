@@ -1,6 +1,7 @@
 import React, {useState, useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import {ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Ingredients from './Preview/Ingredients';
 import Steps from './Preview/Steps';
 
 import { useRecoilState } from 'recoil';
@@ -26,16 +27,20 @@ function Preview( { navigation } ) {
     return (
         
     <View style={styles.container}>
-        <Text style={styles.title}>Recipe</Text>
-        <Steps />
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>Start</Text>
-        </TouchableOpacity>
-        <Instructions continueClicked={continueClicked}/>
-        
-
+        <View style={styles.main}>
+            <Text style={styles.title}>Recipe</Text>
+        </View>
+        <ScrollView>
+            <Ingredients />
+            <Steps />
+        </ScrollView>
+        <View style={styles.main}>
+            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
+                <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
+            </TouchableOpacity>
+            <Instructions continueClicked={continueClicked}/>
+        </View>
     </View>
-
     );
 
 }
@@ -43,12 +48,15 @@ function Preview( { navigation } ) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5B463',
+        backgroundColor: '#F3EAC2',
         justifyContent: 'center',
     },
+    main: {
+        backgroundColor: '#F5B463'
+    }, 
     title: {
         fontSize: 30,
-        fontWeight: 'bold',
+        fontWeight: '900',
         paddingTop: 40,
         padding: 10,
         textAlign: 'center',
