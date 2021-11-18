@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef }from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import axios from 'axios'
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
-import { clickedRecipe } from '../../atoms/ClickedRecipe';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function storeData(key, value) {
@@ -18,10 +17,10 @@ function storeData(key, value) {
 }
 
 function PasteLink( { navigation } ) {
+    const textInput = useRef();
     const [url, setURL] = useState()
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
-    const link = useRecoilValue(clickedRecipe)
 
     const addHistory = (key, value) => {
         const timer = setTimeout(() => {
@@ -34,12 +33,6 @@ function PasteLink( { navigation } ) {
         steps.current = initSteps
     }, [initSteps])
 
-
-    useEffect(() => {
-        setURL(link);
-      }, [link]);
-
-
     async function fetchData() {
         const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}`);
         if (res.data === "Site not yet supported") {
@@ -49,23 +42,25 @@ function PasteLink( { navigation } ) {
         } else if (res.data === "No recipe found on page") {
             alert("No recipe found on page, try another recipe")
         } else if (res.data.includes("url provided must include")) {
-            alert("The url provided must include http:// or https://")
+            alert("The url provided must include http:// or https://")  
         } else {
             navigation.navigate('Preview')
             addHistory(url, `${res.data[0].title}`);
             setInitSteps(res.data.slice(2));
+            textInput.current.clear();
         }
     }
     
     return (
         <View style={styles.container}>
             <TextInput 
-            value={url}
+            ref={textInput}
             style={styles.input}
             placeholder='paste recipe url here'
+            onPressIn={() => textInput.current.clear()}
             onChangeText={(val) => setURL(val)}/>
             <TouchableOpacity style={styles.button} onPress={fetchData}>
-            <Text style={{ color: '#000000' }}>GO</Text>
+                <Text style={{ color: '#000000' }}>GO</Text>
             </TouchableOpacity> 
         </View>
     )

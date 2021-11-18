@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import Tts from 'react-native-tts';
 
 import say from '../../helpers/tts-helper';
 
 import { voiceResults } from '../../atoms/VoiceResults';
+import { stepsState } from '../../atoms/Steps';
+import { currentStepIndex } from '../../atoms/CurrentStepIndex';
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -14,56 +19,78 @@ const getRemaining = (time) => {
     return { minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
 }
 
-const TimerAndTTS = ({step, instructions, time}) => {
+const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
+    const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const [remainingSecs, setRemainingSecs] = useState(time);
     const [isActive, setIsActive] = useState(false);
     const { minutes, seconds } = getRemaining(remainingSecs);
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
-
+    const steps = useRecoilValue(stepsState);
+    
     useEffect(() => {
-        if (voiceResultsState.includes("stop")
-        || voiceResultsState.includes("pause")) {
-            stopTimer();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("start") 
-        || voiceResultsState.includes("go")
-        || voiceResultsState.includes("begin")
-        || voiceResultsState.includes("resume")) {
-            startTimer();
-            setVoiceResultsState("");
-        } 
-        if (voiceResultsState.includes("read")
-        || voiceResultsState.includes("instructions")
-        || voiceResultsState.includes("step")
-        || voiceResultsState.includes("read the instructions")) {
-            speak();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("extend")
-        || voiceResultsState.includes("add")
-        || voiceResultsState.includes("increase")
-        || voiceResultsState.includes("more")) {
-            addTime();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("subtract")
-        || voiceResultsState.includes("decrease")
-        || voiceResultsState.includes("reduce")) {
-            subtractTime();
-            setVoiceResultsState("");
-        }
-        if (voiceResultsState.includes("reset")
-        || voiceResultsState.includes("restart")) {
-            resetTimer();
-            setVoiceResultsState("");
-        }
-        
-
-
+        voiceController();
     },[voiceResultsState]);
+    
+    const voiceController = () => {
+        if (currentIndex === index) {
+            if (voiceResultsState.includes("stop timer")
+            || voiceResultsState.includes("pause timer")) {
+                stopTimer();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("start") 
+            || voiceResultsState.includes("go")
+            || voiceResultsState.includes("begin")
+            || voiceResultsState.includes("resume")) {
+                startTimer();
+                setVoiceResultsState("");
+            } 
+            if (voiceResultsState.includes("read instructions")
+            || voiceResultsState.includes("read step")
+            || voiceResultsState.includes("read the instructions")) {
+                console.log(step, instructions)
+               speak();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("extend")
+            || voiceResultsState.includes("add")
+            || voiceResultsState.includes("increase")
+            || voiceResultsState.includes("more")) {
+                addTime();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("subtract")
+            || voiceResultsState.includes("decrease")
+            || voiceResultsState.includes("reduce")) {
+                subtractTime();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("reset")
+            || voiceResultsState.includes("restart")) {
+                resetTimer();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes('stop reading')) {
+                Tts.stop();
+                setVoiceResultsState("");
+            }
+            if (voiceResultsState.includes("next step")) {
+                if (index+1 < steps.length) {
+                    setCurrentIndex(index+1);
+                    scrollToIndex(index + 1)
+                    setVoiceResultsState("");
+                }
+            }
+            if (voiceResultsState.includes("previous step")) {
+                if (index-1 !== 0) {
+                    setCurrentIndex(index-1);
+                    scrollToIndex(index - 1)
+                    setVoiceResultsState("");
+                }
 
-
+            }
+        }
+    }
 
     const speak = () => {
         say(`Step ${step}, ${instructions}`)
@@ -84,9 +111,6 @@ const TimerAndTTS = ({step, instructions, time}) => {
     const resetTimer = () => {
         setRemainingSecs(time);
         setIsActive(false);
-        
-    
-       
     }
 
     const addTime = () => {
@@ -126,14 +150,14 @@ const TimerAndTTS = ({step, instructions, time}) => {
             <View style={{flex: 0.6, marginTop: 40}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
                     <TouchableOpacity style={styles.timerIcon} onPress={subtractTime}>
-                        <Text style={{fontSize: 20}}> - </Text>
+                        <Icon name="minus-circle" size={40} color="#9AD3BB"/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.adjustTimer} onPress={resetTimer}>
                         <Text style={{fontSize: 15, color: '#000000'}}> Reset </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.timerIcon} onPress={addTime}>
-                        <Text style={{fontSize: 20, color: '#000000'}}> + </Text>
-                    </TouchableOpacity>
+                        <Icon name="plus-circle" size={40} color="#9AD3BB"/> 
+                    </TouchableOpacity>  
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     <TouchableOpacity style={styles.resumebtn} onPress={toggleTimer}>
@@ -174,11 +198,11 @@ const styles = StyleSheet.create({
     },
     timerIcon: {
         justifyContent: 'center',
-        backgroundColor: '#9AD3BB',
+        backgroundColor: 'white',
         alignItems: 'center',
-        width: 30,
-        height: 30,
-        borderRadius: 40
+        width: 40,
+        height: 40,
+        borderRadius: 30
     }
 });
 

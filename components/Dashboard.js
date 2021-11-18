@@ -1,7 +1,7 @@
 import {useRecoilState} from 'recoil';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect } from 'react'
-import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, Button } from 'react-native';
+import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
 
 import Instructions from './Dashboard Components/Instructions';
 import PasteLink from './Dashboard Components/PasteLink';
@@ -16,7 +16,6 @@ function Dashboard({ navigation }) {
 
     async function requestAudioPermission() {
         try {
-          
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
             {
@@ -123,7 +122,7 @@ function Dashboard({ navigation }) {
                                     <PasteLink navigation={navigation}/>
                                 </View>
                                 <View style={styles.item}>
-                                    <History />
+                                    <History navigation={navigation}/>
                                 </View>
                             </View>
                         </View>
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 50,
         height: 400,
-        borderTopStartRadius: 60
+        borderTopStartRadius: 30
     },
     item: {
         marginTop: 20,
