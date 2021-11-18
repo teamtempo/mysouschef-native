@@ -127,6 +127,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             alert("Timer is done!")
         }
     }, [remainingSecs])
+
  
     useEffect(() => {
         let interval = null;
