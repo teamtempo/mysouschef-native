@@ -17,11 +17,6 @@ function Preview( { navigation } ) {
     const [maxHeight, setMaxHeight] = useState();
     const scroll = useRef()
 
-    useEffect(() => {
-        console.log("maxHeight", maxHeight)
-        console.log("Current Pos", currPos)
-    }, [currPos, maxHeight])
-
     const scrollToBottom = () => {
         scroll.current.scrollToEnd({animated: true})
         setAtBottom(true)
