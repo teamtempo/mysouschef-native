@@ -56,7 +56,13 @@ function PasteLink( { navigation } ) {
     }, [initIngredients])
 
     async function fetchData() {
-        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
+        let res;
+        if (ImperialIsEnabled) {
+            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=imperial`);
+        } else {
+            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
+        }
+        
         if (res.data === "Site not yet supported") {
             alert("The website provided is not yet supported, please try another website.")
         } else if (res.data === "Failed to parse domain") {
@@ -92,8 +98,8 @@ function PasteLink( { navigation } ) {
             <View style={styles.switch}>
                 {showUnitChoice()}
                                   <Switch
-                                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                                    thumbColor={ImperialIsEnabled ? "#f5dd4b" : "#f4f3f4"}
+                                    trackColor={{ false: "#767577", true: "#9AD3BB" }}
+                                    thumbColor={ImperialIsEnabled ? "#F5B463" : "#f4f3f4"}
                                     ios_backgroundColor="#3e3e3e"
                                     onValueChange={toggleSwitch}
                                     value={ImperialIsEnabled}
