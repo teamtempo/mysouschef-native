@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ingredients from './Preview/Ingredients';
@@ -8,7 +8,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 function Preview( { navigation } ) {
     const [atBottom, setAtBottom] = useState(false)
+    const [currPos, setCurrPos] = useState();
     const scroll = useRef()
+
+    useEffect(() => {
+        console.log(currPos)
+    }, [currPos])
 
     const scrollToBottom = () => {
         scroll.current.scrollToEnd({animated: true})
@@ -27,12 +32,13 @@ function Preview( { navigation } ) {
         </View>
             <ScrollView
             ref={scroll}
+            onScroll={e => setCurrPos(e.nativeEvent.contentOffset.y)}
             showsVerticalScrollIndicator={true}>
                 <Ingredients />
                 <Steps />
             </ScrollView>
         <View style={styles.scrollView}>
-            { atBottom ? 
+            { atBottom || currPos > 70 ? 
             <TouchableOpacity onPress={scrollToTop}>
                 <Icon name="arrow-circle-up" size={55} color="#fff"/>
             </TouchableOpacity>
