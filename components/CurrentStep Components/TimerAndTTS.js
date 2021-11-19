@@ -82,7 +82,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                 }
             }
             if (voiceResultsState.includes("previous step")) {
-                if (index-1 !== 0) {
+                if (index-1 >= 0) {
                     setCurrentIndex(index-1);
                     scrollToIndex(index - 1)
                     setVoiceResultsState("");

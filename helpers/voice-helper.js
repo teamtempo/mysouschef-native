@@ -9,7 +9,7 @@ async function createPorcupineManager() {
     try {
       porcupineManager = await PorcupineManager.fromKeywords(
         ["blueberry", "porcupine"],
-        detectionCallback)
+        detectionCallback);
         addListener()
         console.log(porcupineManager);
         console.log("porcupine started")
