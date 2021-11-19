@@ -43,7 +43,7 @@ function PasteLink( { navigation } ) {
     }, [initIngredients])
 
     async function fetchData() {
-        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}`);
+        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
         if (res.data === "Site not yet supported") {
             alert("The website provided is not yet supported, please try another website.")
         } else if (res.data === "Failed to parse domain") {

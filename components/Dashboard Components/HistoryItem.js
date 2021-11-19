@@ -31,7 +31,7 @@ const HistoryItem = ({navigation, item}) => {
     async function getLink() {
         let clickedItem = links.find(link => link.value === item);
         let link = clickedItem.key.slice(1);
-        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}`);
+        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
         navigation.navigate('Preview')  
         setInitSteps(res.data.slice(2));
         setInitIngredients(res.data[1])
