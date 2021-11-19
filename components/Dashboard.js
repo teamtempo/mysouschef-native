@@ -1,7 +1,7 @@
 import {useRecoilState} from 'recoil';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect } from 'react'
-import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, Switch } from 'react-native';
 
 import Instructions from './Dashboard Components/Instructions';
 import PasteLink from './Dashboard Components/PasteLink';
@@ -13,6 +13,8 @@ import { micPermission } from '../atoms/MicPermission';
 function Dashboard({ navigation }) {
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
     const [micPermissionState, setMicPermissionState] = useRecoilState(micPermission);
+
+    
 
     async function requestAudioPermission() {
         try {
@@ -121,6 +123,7 @@ function Dashboard({ navigation }) {
                                 <View style={styles.item}>
                                     <PasteLink navigation={navigation}/>
                                 </View>
+                               
                                 <View style={styles.item}>
                                     <History navigation={navigation}/>
                                 </View>
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#F3EAC2',
         alignItems: 'center',
-        paddingTop: 70,
+        paddingTop: 30,
         paddingBottom: 30,
         borderBottomEndRadius: 60,
     },
@@ -162,7 +165,8 @@ const styles = StyleSheet.create({
     logo: {
         width: 250,
         height: 150
-    }
+    },
+    
 });
 
 export default Dashboard;

@@ -10,6 +10,7 @@ import { ingredientsState } from '../../atoms/Ingredients';
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { unitChoice } from '../../atoms/UnitChoice';
 
 const HistoryItem = ({navigation, item}) => {
     const links = useRecoilValue(pastLinks);
@@ -19,6 +20,8 @@ const HistoryItem = ({navigation, item}) => {
     const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
     const ingredients = useRef(initIngredients)
 
+    const [ImperialIsEnabled, setImperialIsEnabled] = useRecoilState(unitChoice);
+
     useEffect(() => {
         steps.current = initSteps
     }, [initSteps])
@@ -27,11 +30,16 @@ const HistoryItem = ({navigation, item}) => {
         ingredients.current = initIngredients
     }, [initIngredients])
 
-    
+    //hello
     async function getLink() {
+        let res;
         let clickedItem = links.find(link => link.value === item);
         let link = clickedItem.key.slice(1);
-        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
+        if (ImperialIsEnabled) {
+            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=imperial`);
+        } else {
+            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
+        }
         navigation.navigate('Preview')  
         setInitSteps(res.data.slice(2));
         setInitIngredients(res.data[1])

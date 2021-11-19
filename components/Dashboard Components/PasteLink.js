@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef }from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Switch } from 'react-native'
 import axios from 'axios'
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
 import { ingredientsState } from '../../atoms/Ingredients';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { unitChoice } from '../../atoms/UnitChoice';
 
 function storeData(key, value) {
     AsyncStorage.setItem(key, value)
@@ -27,6 +28,18 @@ function PasteLink( { navigation } ) {
     const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
     const ingredients = useRef(initIngredients)
 
+    const [ImperialIsEnabled, setImperialIsEnabled] = useRecoilState(unitChoice);
+    const toggleSwitch = () => setImperialIsEnabled(previousState => !previousState);
+
+    function showUnitChoice() {
+        if (ImperialIsEnabled === false) {
+            return <Text style={{ fontSize: 14}}>Measurements are shown in Metric units</Text>
+        } else {
+            return <Text style={{ fontSize: 14}}>Measurements are shown in Imperial units</Text>
+        }
+
+    }
+
     const addHistory = (key, value) => {
         const timer = setTimeout(() => {
             storeData(("@"+key), value);
@@ -43,7 +56,13 @@ function PasteLink( { navigation } ) {
     }, [initIngredients])
 
     async function fetchData() {
-        const res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
+        let res;
+        if (ImperialIsEnabled) {
+            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=imperial`);
+        } else {
+            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
+        }
+        
         if (res.data === "Site not yet supported") {
             alert("The website provided is not yet supported, please try another website.")
         } else if (res.data === "Failed to parse domain") {
@@ -62,8 +81,10 @@ function PasteLink( { navigation } ) {
     }
     
     return (
-        <View style={styles.container}>
-            <TextInput 
+        <View>
+    <View style={styles.container}>
+        <View style= {{ flexDirection: 'row', alignItems: 'center'}}>
+        <TextInput 
             ref={textInput}
             style={styles.input}
             placeholder='paste recipe url here'
@@ -73,6 +94,21 @@ function PasteLink( { navigation } ) {
                 <Text style={{ color: '#000000' }}>GO</Text>
             </TouchableOpacity> 
         </View>
+            
+            <View style={styles.switch}>
+                {showUnitChoice()}
+                                  <Switch
+                                    trackColor={{ false: "#767577", true: "#9AD3BB" }}
+                                    thumbColor={ImperialIsEnabled ? "#F5B463" : "#f4f3f4"}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={toggleSwitch}
+                                    value={ImperialIsEnabled}
+                                  />
+                                </View>
+        </View>
+        
+        </View>
+       
     )
 
 }
@@ -85,14 +121,16 @@ const styles = StyleSheet.create({
         width: 350,
         height: 100,
         borderRadius: 40,
-        flexDirection: 'row'
+        paddingTop: 7,
     },
     input: {
         borderWidth: 1,
         borderRadius: 40,
         borderColor: '#777',
         padding: 8,
-        margin: 10,
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
         width: 250,
         height: 40,
         color:'#000000',
@@ -101,10 +139,17 @@ const styles = StyleSheet.create({
         borderRadius: 60,
         height: 40,
         width: 40,
+        marginTop: 10,
+        marginRight: 10,
         backgroundColor: '#9AD3BB',
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    switch: {
+        flex: 1,
+        flexDirection: 'row',	
+        alignItems: 'center',
+      }
 });
 
 export default PasteLink;
