@@ -36,9 +36,9 @@ const HistoryItem = ({navigation, item}) => {
         let clickedItem = links.find(link => link.value === item);
         let link = clickedItem.key.slice(1);
         if (ImperialIsEnabled) {
-            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
-        } else {
             res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=imperial`);
+        } else {
+            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
         }
         navigation.navigate('Preview')  
         setInitSteps(res.data.slice(2));
