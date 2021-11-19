@@ -33,9 +33,9 @@ function PasteLink( { navigation } ) {
 
     function showUnitChoice() {
         if (ImperialIsEnabled === false) {
-            return <Text style={{ fontSize: 14}}>Measurements are shown in Metric units</Text>
+            return <Text style={{ fontSize: 14, color: 'black'}}>Measurements are shown in Metric units</Text>
         } else {
-            return <Text style={{ fontSize: 14}}>Measurements are shown in Imperial units</Text>
+            return <Text style={{ fontSize: 14, color: 'black'}}>Measurements are shown in Imperial units</Text>
         }
 
     }
