@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ingredients from './Preview/Ingredients';
@@ -7,10 +7,17 @@ import { PorcupineManager } from '@picovoice/porcupine-react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 function Preview( { navigation } ) {
+    const [atBottom, setAtBottom] = useState(false)
     const scroll = useRef()
 
     const scrollToBottom = () => {
         scroll.current.scrollToEnd({animated: true})
+        setAtBottom(true)
+    }
+
+    const scrollToTop = () => {
+        scroll.current.scrollTo({y: 0, animated: true})
+        setAtBottom(false)
     }
 
     return (
@@ -25,9 +32,15 @@ function Preview( { navigation } ) {
                 <Steps />
             </ScrollView>
         <View style={styles.scrollView}>
+            { atBottom ? 
+            <TouchableOpacity onPress={scrollToTop}>
+                <Icon name="arrow-circle-up" size={55} color="#fff"/>
+            </TouchableOpacity>
+            : 
             <TouchableOpacity onPress={scrollToBottom}>
                 <Icon name="arrow-circle-down" size={55} color="#fff"/>
             </TouchableOpacity>
+            } 
         </View>
         <View style={styles.main}>
             <TouchableOpacity onPress={() => navigation.navigate('CurrentStep')} style={styles.button}>
