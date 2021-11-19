@@ -5,7 +5,8 @@
  * @format
  * @flow strict-local
  */
- import React from 'react';
+ import SplashScreen from 'react-native-splash-screen';
+ import React, { useEffect } from 'react';
  import { RecoilRoot } from 'recoil';
  import RecoilOutside from "recoil-outside"
  
@@ -18,19 +19,23 @@
   
  const Stack = createStackNavigator();
  
- export default function App() {
- 
-   return (
-     <RecoilRoot>
-       <NavigationContainer>
-      <RecoilOutside/>
-         <Stack.Navigator>
-           <Stack.Screen name="DashBoard" component={Dashboard} options={{ headerShown: false }} />
-           <Stack.Screen name="Preview" component={Preview} options={{ headerShown: false }} />
-           <Stack.Screen name="CurrentStep" component={CurrentStep} options={{ headerShown: false }} />
-         </Stack.Navigator>
-       </NavigationContainer>
-     </RecoilRoot>  
-   );
- }
+export default function App() {
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, [])
+
+  return (
+    <RecoilRoot>
+      <NavigationContainer>
+    <RecoilOutside/>
+        <Stack.Navigator>
+          <Stack.Screen name="DashBoard" component={Dashboard} options={{ headerShown: false }} />
+          <Stack.Screen name="Preview" component={Preview} options={{ headerShown: false }} />
+          <Stack.Screen name="CurrentStep" component={CurrentStep} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RecoilRoot>  
+  );
+}
 
