@@ -5,7 +5,6 @@ import { stepsState } from '../../atoms/Steps'
 import Modal from "react-native-modal";
 import { WheelPicker } from "react-native-wheel-picker-android";
 
-
 const Steps = () => {
 
     let hourPicker = [...Array(25).keys()].map(i => i.toString());
@@ -118,7 +117,7 @@ const Steps = () => {
     
     return ( 
          
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
         {steps.map((step, index) => {
             return (
                 <View key={index} style={styles.step}>
@@ -164,7 +163,7 @@ const Steps = () => {
                 </View>
             )
         })}
-    </ScrollView>
+    </View>
       
     );
 }
@@ -172,7 +171,7 @@ const Steps = () => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        backgroundColor: '#F3EAC1'
+        backgroundColor: '#F3EAC1',
     },
     step: {
         padding: 20,
