@@ -56,7 +56,7 @@ function Preview( { navigation } ) {
                 <Steps />
             </ScrollView>
         <View style={[styles.scrollView, styles.iconShadow]}>
-            { atBottom || currPos > 1550 ? 
+            { atBottom || currPos > 50 ? 
             <TouchableOpacity onPress={scrollToTop}>
                 <Icon name="arrow-circle-up" size={55} color="#fff"/>
             </TouchableOpacity>
