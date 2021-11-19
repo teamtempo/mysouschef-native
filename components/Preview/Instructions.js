@@ -74,13 +74,13 @@ const Instructions = ( {continueClicked} ) => {
                              <Text style={{ fontSize:14, fontWeight: "bold", color: 'black' }}>
                              ● "Extend"
                             </Text>
-                            <Text style={{ fontSize:14, marginLeft: 2}}>
+                            <Text style={{ fontSize:14, marginLeft: 2, color: 'black'}}>
                                or
                             </Text>
                             <Text style={{ fontSize:14, marginLeft: 2, fontWeight: "bold", color: 'black'}}>
                                "Increase"
                             </Text>
-                            <Text style={{ fontSize:14, marginLeft: 2}}>
+                            <Text style={{ fontSize:14, marginLeft: 2, color: 'black'}}>
                             to increase the timer by 1 minute.
                             </Text>
                              </View>
@@ -89,13 +89,13 @@ const Instructions = ( {continueClicked} ) => {
                              <Text style={{ fontSize:14, fontWeight: "bold", color: 'black' }}>
                              ● "Subtract"
                             </Text>
-                            <Text style={{ fontSize:14, marginLeft: 2}}>
+                            <Text style={{ fontSize:14, marginLeft: 2, color: 'black'}}>
                                or
                             </Text>
                             <Text style={{ fontSize:14, marginLeft: 2, fontWeight: "bold", color: 'black'}}>
                             "Decrease"
                             </Text>
-                            <Text style={{ fontSize:14, marginLeft: 2}}>
+                            <Text style={{ fontSize:14, marginLeft: 2, color: 'black' }}>
                             to decrease the timer by 1 minute.
                             </Text>
                              </View>
@@ -104,13 +104,13 @@ const Instructions = ( {continueClicked} ) => {
                              <Text style={{ fontSize:14, fontWeight: "bold", color: 'black' }}>
                              ● "Reset"
                             </Text>
-                            <Text style={{ fontSize:14, marginLeft: 2}}>
+                            <Text style={{ fontSize:14, marginLeft: 2, color: 'black'}}>
                                or
                             </Text>
                             <Text style={{ fontSize:14, marginLeft: 2, fontWeight: "bold", color: 'black'}}>
                             "Restart"
                             </Text>
-                            <Text style={{ fontSize:14, marginLeft: 2}}>
+                            <Text style={{ fontSize:14, marginLeft: 2, color: 'black'}}>
                             to to restart the timer.
                             </Text>
                              </View>
