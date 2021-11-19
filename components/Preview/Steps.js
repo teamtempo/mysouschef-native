@@ -135,7 +135,7 @@ const Steps = () => {
                     <View style={styles.details}>
                         <Text style={{color: '#000000'}}> {step.details} </Text>
                     </View>
-                    <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
+                    <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)} style={{paddingLeft: 25, paddingRight: 25}}>
                         <View style={styles.modal}>
                            
                             <WheelPicker
@@ -156,8 +156,8 @@ const Steps = () => {
                             
                            
                         </View>
-                        <TouchableOpacity style={{backgroundColor: "#9AD3BB", height: 36, alignItems: 'center', borderRadius: 20, marginTop: 5}}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold'}}onPress={() => {saveTimer()}}>Save timer</Text>
+                        <TouchableOpacity style={styles.modalbutton}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}onPress={() => {saveTimer()}}>Save timer</Text>
                         </TouchableOpacity>
                     </Modal>
                 </View>
@@ -213,21 +213,17 @@ const styles = StyleSheet.create({
     modal: {
         flexDirection: 'row',
         backgroundColor: "white", 
-        margin:0,
-        padding:0, 
-        borderRadius:20, 
+        borderRadius: 30, 
+        padding: 20,
         borderColor: '#F5B463',
-        borderWidth: 2,
         alignContent: 'center',
     },
     modalbutton: {
-        flex: 1,
         alignItems: "center",
-        backgroundColor: "#F8E0B8",
-        padding: 10,
-        marginLeft: 10,
-        height: 100,
-        borderRadius: 20,
+        backgroundColor: "#9AD3BB",
+        padding: 15,
+        marginTop: 15,
+        borderRadius: 30,
     },
     modalinput: {
         borderColor: 'gray',
