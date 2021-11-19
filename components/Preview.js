@@ -1,13 +1,31 @@
-import React from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, {useState, useEffect } from 'react'
+import {ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Ingredients from './Preview/Ingredients';
 import Steps from './Preview/Steps';
-import { PorcupineManager } from '@picovoice/porcupine-react-native';
+
+import { useRecoilState } from 'recoil';
+import { instructionsModal } from '../atoms/InstructionsModal';
+import Instructions from './Preview/Instructions';
+import { continueClicked } from '../atoms/ContinueClicked';
+
 
 function Preview( { navigation } ) {
 
+    const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
+    const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
+
+    useEffect(() => {
+        if (continueClickedState) {
+            navigation.navigate('CurrentStep');
+            setContinueClickedState(false);
+        }
+    }, [continueClickedState])
+
+    
+
     return (
+        
     <View style={styles.container}>
         <View style={styles.main}>
             <Text style={styles.title}>Recipe</Text>
@@ -17,9 +35,10 @@ function Preview( { navigation } ) {
             <Steps />
         </ScrollView>
         <View style={styles.main}>
-            <TouchableOpacity onPress={() => navigation.navigate('CurrentStep')} style={styles.button}>
+            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
             </TouchableOpacity>
+            <Instructions continueClicked={continueClicked}/>
         </View>
     </View>
     );
@@ -47,14 +66,22 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 15,
     },
-    checkbox: {
-        alignItems: "center",
-        backgroundColor: "#D89B63",
-        padding: 10
-    },
     bgImage: {
         flex: 1,
         justifyContent: "center"
+    },
+    modal: {
+        flexDirection: 'column',
+        backgroundColor: "white", 
+        marginLeft:-15,
+        marginRight:-15,
+        paddingBottom: 10,
+        paddingTop: 10, 
+        paddingLeft: 2,
+        paddingRight: 10,
+        borderRadius:20, 
+        borderColor: '#F5B463',
+        borderWidth: 2,
     },
 
 });
