@@ -103,37 +103,39 @@ function Dashboard({ navigation }) {
   
     const logo = { uri: 'https://i.ibb.co/SyzsG9g/My-Sous-Chef-removebg-preview.png'}
     return (
-            <TouchableWithoutFeedback onPress={() => {
-                Keyboard.dismiss();
-            }}>
-                <KeyboardAvoidingView
-                behavior="position"
-                style={styles.container}
-                >
-                    <View>
-                        {!isLoading ? null : <ActivityIndicator style={styles.activityIndicator} size="large" />}
-                        <View style={styles.header}>
-                            <View style={styles.item}>
-                                <Image source={logo} style={styles.logo}/>
-                            </View>
-                            <View style={styles.item}>
-                                <Instructions />
-                            </View>
-                        </View>
-                        <View style={{backgroundColor: '#F3EAC2'}}>
-                            <View style={styles.body}>
-                                <View style={styles.item}>
-                                    <PasteLink navigation={navigation}/>
-                                </View>
-                               
-                                <View style={styles.item}>
-                                    <History navigation={navigation}/>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </KeyboardAvoidingView>
-            </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => {
+        Keyboard.dismiss();
+      }}>
+      <KeyboardAvoidingView behavior="position" style={styles.container}>
+          {!isLoading ? null : ( 
+              <View style={styles.activityIndicator}>
+                <Text style={{ fontSize:20 }}>Loading Recipe</Text>
+                <ActivityIndicator style={{height:100}} size={75} />
+              </View>
+            )}
+      <View>
+          <View style={styles.header}>
+              <View style={styles.item}>
+                  <Image source={logo} style={styles.logo}/>
+              </View>
+              <View style={styles.item}>
+                  <Instructions />
+              </View>
+          </View>
+          <View style={{backgroundColor: '#F3EAC2'}}>
+              <View style={styles.body}>
+                  <View style={styles.item}>
+                      <PasteLink navigation={navigation}/>
+                  </View>
+                  
+                  <View style={styles.item}>
+                      <History navigation={navigation}/>
+                  </View>
+              </View>
+          </View>
+      </View>
+  </KeyboardAvoidingView>
+</TouchableWithoutFeedback>
         )
     }
     
@@ -158,6 +160,9 @@ const styles = StyleSheet.create({
         borderTopStartRadius: 30
     },
     activityIndicator: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: "center",
       backgroundColor: 'rgba(52, 52, 52, 0.6)',
       height: '100%',
       width: '100%',
