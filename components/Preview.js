@@ -37,7 +37,7 @@ function Preview( { navigation } ) {
                 <Ingredients />
                 <Steps />
             </ScrollView>
-        <View style={styles.scrollView}>
+        <View style={[styles.scrollView, styles.iconShadow]}>
             { atBottom || currPos > 1550 ? 
             <TouchableOpacity onPress={scrollToTop}>
                 <Icon name="arrow-circle-up" size={55} color="#fff"/>
@@ -97,7 +97,12 @@ const styles = StyleSheet.create({
         bottom: 70,
         right: 10,
     },
-
+    iconShadow: {
+        elevation: 10,
+        shadowColor: '#171717',
+        shadowOpacity: 10,
+        shadowRadius: 3,    
+    },
 });
 
 export default Preview;
