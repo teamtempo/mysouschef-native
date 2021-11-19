@@ -14,16 +14,17 @@ import { currentStepIndex } from '../../atoms/CurrentStepIndex';
 const formatNumber = number => `0${number}`.slice(-2);
 
 const getRemaining = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time - minutes * 60;
-    return { minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
+    const hours = Math.floor(time / 3600)
+    const minutes = Math.floor((time - hours * 3600) / 60);
+    const seconds = time % 60;
+    return { hours: formatNumber(hours), minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
 }
 
 const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const [remainingSecs, setRemainingSecs] = useState(time);
     const [isActive, setIsActive] = useState(false);
-    const { minutes, seconds } = getRemaining(remainingSecs);
+    const { hours, minutes, seconds } = getRemaining(remainingSecs);
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
     
@@ -143,11 +144,17 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
 
     return (
         <View style={{flex: 1, marginTop: 50 }}>
+            { hours > 0 ? 
+            <View style={{alignItems: 'center'}}>
+                <Text style={{fontSize: 70, color: '#000000'}}>{`${hours}:${minutes}:${seconds}`}</Text>
+                <Text style={{fontSize: 20, color: '#000000'}}>{ hours <= 1 ? "hour" : "hours"}        { minutes <= 1 ? "minute" : "minutes"}      { seconds <= 1 ? "second" : "seconds" }</Text>
+            </View>
+            : 
             <View style={{alignItems: 'center'}}>
                 <Text style={{fontSize: 70, color: '#000000'}}>{`${minutes}:${seconds}`}</Text>
-                <Text style={{fontSize: 20, color: '#000000'}}>minutes    seconds</Text>
+                <Text style={{fontSize: 20, color: '#000000'}}>{ minutes <= 1 ? "minute" : "minutes"}      { seconds <= 1 ? "second" : "seconds" }</Text>
             </View>
-
+            }
             <View style={{flex: 0.6, marginTop: 40}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
                     <TouchableOpacity style={styles.timerIcon} onPress={subtractTime}>
