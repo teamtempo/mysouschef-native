@@ -2,8 +2,34 @@ import { PorcupineManager } from '@picovoice/porcupine-react-native';
 import { voiceResults } from '../atoms/VoiceResults';
 import { promiseSetRecoil } from "recoil-outside"
 import Voice from '@react-native-voice/voice';
+import Sound from 'react-native-sound';
+
 
 let porcupineManager
+
+Sound.setCategory('Playback');
+
+function sound() {
+  var not2 = new Sound('not1.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('failed to load the sound', error);
+        return;
+      }
+      // loaded successfully
+      console.log('duration in seconds: ' + not2.getDuration() + 'number of channels: ' + not2.getNumberOfChannels());
+      not2.setVolume(1);
+      // Play the sound with an onEnd callback
+      not2.play((success) => {
+        if (success) {
+          console.log('successfully finished playing');
+        } else {
+          console.log('playback failed due to audio decoding errors');
+        }
+      });
+    });
+  
+}
+
 
 async function createPorcupineManager() {
     try {
@@ -21,6 +47,7 @@ async function createPorcupineManager() {
 function detectionCallback(keyWordIndex) {
   if(keyWordIndex === 0) {
     console.log("blueberry detected")
+    sound();
     startRecording();
   } else if (keyWordIndex === 1) {
     console.log("porcupine detected")

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -10,6 +10,8 @@ import say from '../../helpers/tts-helper';
 import { voiceResults } from '../../atoms/VoiceResults';
 import { stepsState } from '../../atoms/Steps';
 import { currentStepIndex } from '../../atoms/CurrentStepIndex';
+
+
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -26,7 +28,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const { minutes, seconds } = getRemaining(remainingSecs);
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
-    
+
     useEffect(() => {
         voiceController();
     },[voiceResultsState]);
@@ -35,6 +37,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
         if (currentIndex === index) {
             if (voiceResultsState.includes("stop timer")
             || voiceResultsState.includes("pause timer")) {
+                say("timer stopped")
                 stopTimer();
                 setVoiceResultsState("");
             }
@@ -48,8 +51,8 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             if (voiceResultsState.includes("read instructions")
             || voiceResultsState.includes("read step")
             || voiceResultsState.includes("read the instructions")) {
-                console.log(step, instructions)
-               speak();
+                console.log(step, instructions) 
+                speak();
                 setVoiceResultsState("");
             }
             if (voiceResultsState.includes("extend")
@@ -158,7 +161,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.timerIcon} onPress={addTime}>
                         <Icon name="plus-circle" size={40} color="#9AD3BB"/> 
-                    </TouchableOpacity>  
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     <TouchableOpacity style={styles.resumebtn} onPress={toggleTimer}>
