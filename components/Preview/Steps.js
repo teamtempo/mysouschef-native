@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F3EAC1',
     },
     step: {
-        padding: 20
+        padding: 20,
     },
     stepNumber: {
         padding: 5,

@@ -6,6 +6,11 @@ import Steps from './Preview/Steps';
 import { PorcupineManager } from '@picovoice/porcupine-react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { useRecoilState } from 'recoil';
+import { instructionsModal } from '../atoms/InstructionsModal';
+import Instructions from './Preview/Instructions';
+import { continueClicked } from '../atoms/ContinueClicked';
+
 function Preview( { navigation } ) {
     const [atBottom, setAtBottom] = useState(false)
     const [currPos, setCurrPos] = useState();
@@ -25,7 +30,20 @@ function Preview( { navigation } ) {
         setAtBottom(false)
     }
 
+    const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
+    const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
+
+    useEffect(() => {
+        if (continueClickedState) {
+            navigation.navigate('CurrentStep');
+            setContinueClickedState(false);
+        }
+    }, [continueClickedState])
+
+    
+
     return (
+        
     <View style={styles.container}>
         <View style={styles.main}>
             <Text style={styles.title}>Recipe</Text>
@@ -49,9 +67,10 @@ function Preview( { navigation } ) {
             } 
         </View>
         <View style={styles.main}>
-            <TouchableOpacity onPress={() => navigation.navigate('CurrentStep')} style={styles.button}>
+            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
             </TouchableOpacity>
+            <Instructions continueClicked={continueClicked}/>
         </View>
     </View>
     );
@@ -79,11 +98,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 15,
     },
-    checkbox: {
-        alignItems: "center",
-        backgroundColor: "#D89B63",
-        padding: 10
-    },
     bgImage: {
         flex: 1,
         justifyContent: "center"
@@ -102,6 +116,19 @@ const styles = StyleSheet.create({
         shadowColor: '#171717',
         shadowOpacity: 10,
         shadowRadius: 3,    
+    },
+    modal: {
+        flexDirection: 'column',
+        backgroundColor: "white", 
+        marginLeft:-15,
+        marginRight:-15,
+        paddingBottom: 10,
+        paddingTop: 10, 
+        paddingLeft: 2,
+        paddingRight: 10,
+        borderRadius:20, 
+        borderColor: '#F5B463',
+        borderWidth: 2,
     },
 });
 
