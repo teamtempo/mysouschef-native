@@ -35,7 +35,7 @@ const Instructions = ( {continueClicked} ) => {
                              <Text style={{ fontSize:14, fontWeight: "bold", color: 'black' }}>
                              ● "Start"
                             </Text>
-                            <Text style={{ fontSize:14, marginLeft: 2}}>
+                            <Text style={{ fontSize:14, marginLeft: 2, color: 'black'}}>
                                or
                             </Text>
                             <Text style={{ fontSize:14, marginLeft: 2, fontWeight: "bold", color: 'black'}}>
