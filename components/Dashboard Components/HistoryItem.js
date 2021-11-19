@@ -30,7 +30,7 @@ const HistoryItem = ({navigation, item}) => {
         ingredients.current = initIngredients
     }, [initIngredients])
 
-    
+    //hello
     async function getLink() {
         let res;
         let clickedItem = links.find(link => link.value === item);
