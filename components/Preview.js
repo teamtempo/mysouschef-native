@@ -14,11 +14,13 @@ import { continueClicked } from '../atoms/ContinueClicked';
 function Preview( { navigation } ) {
     const [atBottom, setAtBottom] = useState(false)
     const [currPos, setCurrPos] = useState();
+    const [maxHeight, setMaxHeight] = useState();
     const scroll = useRef()
 
     useEffect(() => {
-        console.log(currPos)
-    }, [currPos])
+        console.log("maxHeight", maxHeight)
+        console.log("Current Pos", currPos)
+    }, [currPos, maxHeight])
 
     const scrollToBottom = () => {
         scroll.current.scrollToEnd({animated: true})
@@ -51,12 +53,15 @@ function Preview( { navigation } ) {
             <ScrollView
             ref={scroll}
             onScroll={e => setCurrPos(e.nativeEvent.contentOffset.y)}
+            onContentSizeChange={(width, height) => {
+                setMaxHeight(height)
+            }}
             showsVerticalScrollIndicator={true}>
                 <Ingredients />
                 <Steps />
             </ScrollView>
         <View style={[styles.scrollView, styles.iconShadow]}>
-            { atBottom || currPos > 50 ? 
+            { atBottom || currPos > maxHeight / 2 ? 
             <TouchableOpacity onPress={scrollToTop}>
                 <Icon name="arrow-circle-up" size={55} color="#fff"/>
             </TouchableOpacity>
