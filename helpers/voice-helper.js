@@ -51,7 +51,6 @@ function detectionCallback(keyWordIndex) {
     setTimeout(() => {
       startRecording();
     }, 1000);
-    
   } else if (keyWordIndex === 1) {
     console.log("porcupine detected")
   }

@@ -21,6 +21,8 @@ const getRemaining = (time) => {
     return { minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
 }
 
+
+
 const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const [remainingSecs, setRemainingSecs] = useState(time);
@@ -28,6 +30,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const { minutes, seconds } = getRemaining(remainingSecs);
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
+    
 
     useEffect(() => {
         voiceController();
@@ -36,64 +39,87 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const voiceController = () => {
         if (currentIndex === index) {
             if (voiceResultsState.includes("stop timer")
-            || voiceResultsState.includes("pause timer")) {
+            || voiceResultsState.includes("pause timer")
+            || voiceResultsState.includes("pause")
+            || voiceResultsState.includes("stop")) {
                 say("timer stopped")
                 stopTimer();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("start") 
+            } else if (voiceResultsState.includes("start") 
             || voiceResultsState.includes("go")
+            || voiceResultsState.includes("start timer")
+            || voiceResultsState.includes("begin timer")
             || voiceResultsState.includes("begin")
             || voiceResultsState.includes("resume")) {
                 startTimer();
-                setVoiceResultsState("");
-            } 
-            if (voiceResultsState.includes("read instructions")
+            } else if (voiceResultsState.includes("read instructions")
             || voiceResultsState.includes("read step")
+            || voiceResultsState.includes("instructions")
             || voiceResultsState.includes("read the instructions")) {
                 console.log(step, instructions) 
                 speak();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("extend")
+            } else if (voiceResultsState.includes("extend")
             || voiceResultsState.includes("add")
+            || voiceResultsState.includes("increase timer")
+            || voiceResultsState.includes("extend timer")
+            || voiceResultsState.includes("increase timer")
             || voiceResultsState.includes("increase")
             || voiceResultsState.includes("more")) {
                 addTime();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("subtract")
+                    
+            } else if (voiceResultsState.includes("subtract")
+            || voiceResultsState.includes("decrease timer")
+            || voiceResultsState.includes("reduce timer")
             || voiceResultsState.includes("decrease")
             || voiceResultsState.includes("reduce")) {
                 subtractTime();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("reset")
-            || voiceResultsState.includes("restart")) {
+                
+            } else if (voiceResultsState.includes("reset")
+            || voiceResultsState.includes("restart")
+            || voiceResultsState.includes("restart timer")
+            || voiceResultsState.includes("restart timer")) {
                 resetTimer();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes('stop reading')) {
+                   
+            } else if (voiceResultsState.includes('stop reading')) {
                 Tts.stop();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("next step")) {
+            } else if (voiceResultsState.includes("next step")
+            || voiceResultsState.includes("next")) {
                 if (index+1 < steps.length) {
                     setCurrentIndex(index+1);
                     scrollToIndex(index + 1)
-                    setVoiceResultsState("");
                 }
-            }
-            if (voiceResultsState.includes("previous step")) {
+            } else if (voiceResultsState.includes("previous step")
+            || voiceResultsState.includes("previous")) {
                 if (index-1 >= 0) {
                     setCurrentIndex(index-1);
                     scrollToIndex(index - 1)
-                    setVoiceResultsState("");
                 }
-
+            } else if (voiceResultsState !== "") {
+                say("Didnt understand the command, please try again");
             }
+        
         }
     }
+                    
+             
+                       
+                     
+                      
+                
+                  
+                
+        
+           
+                   
+         
+    
+          
+             
+            
+           
+            
+               
+              
+            
 
     const speak = () => {
         say(`Step ${step}, ${instructions}`)
