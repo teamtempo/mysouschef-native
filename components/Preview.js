@@ -43,7 +43,6 @@ function Preview( { navigation } ) {
             try {
               const showInts = await AsyncStorage.getItem('showInstructions')
               setShowInstructions(showInts)
-              console.log("value of instructions in async",typeof(showInts));
               } catch (error) {
                   console.log(error)
               }

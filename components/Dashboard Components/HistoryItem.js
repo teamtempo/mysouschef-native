@@ -15,7 +15,7 @@ import { unitChoice } from '../../atoms/UnitChoice';
 
 const HistoryItem = ({navigation, item}) => {
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
-    const[isLoading, setIsLoading] = useRecoilState(loading);
+    const [isLoading, setIsLoading] = useRecoilState(loading);
     const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
     const [ImperialIsEnabled, setImperialIsEnabled] = useRecoilState(unitChoice);
     

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList, ScrollView } from 'react-native'
 import { useRecoilValue } from 'recoil';
 import HistoryItem from './HistoryItem';
 import { pastLinks } from '../../atoms/PastLinks';
@@ -9,7 +9,10 @@ function History({ navigation }) {
 
     return (
         <View style={styles.container}>
+        <ScrollView >
            <FlatList data={previous} renderItem={({ item }) => <HistoryItem item={item.value} navigation={navigation}/>} keyExtractor={item => item.key}/>
+        </ScrollView>
+
         </View>
     )
 }
@@ -25,6 +28,6 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
 });
-
+ 
 
 export default History;
