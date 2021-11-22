@@ -7,6 +7,7 @@ import { instructionsModal } from '../../atoms/InstructionsModal';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { showInstructions } from '../../atoms/ShowInstructions';
 import { continueClicked } from '../../atoms/ContinueClicked';
 
 function storeData(key, value) {
@@ -20,7 +21,7 @@ function storeData(key, value) {
 }
 
 const Instructions = ( {continueClicked} ) => {
-    const [showInstructions, setShowInstructions] = useState(true);
+    const [showInst, setShowInst] = useRecoilState(showInstructions);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
 
@@ -30,17 +31,12 @@ const Instructions = ( {continueClicked} ) => {
     }
 
     function updateInstructions() {
-        setShowInstructions(!showInstructions)
+        setShowInst(!showInst)
         const timer = setTimeout(() => {
-            storeData(("showInstructions"), JSON.stringify(!showInstructions))
+            storeData(("showInstructions"), JSON.stringify(!showInst))
         }, 1);
           return () => clearTimeout(timer);
     }
-
-/*     useEffect(() => {
-        console.log(showInstructions)
-        updateInstructions(showInstructions)
-    },[showInstructions]) */
     
     return ( 
         <View>
@@ -101,7 +97,7 @@ const Instructions = ( {continueClicked} ) => {
                                     style={{marginTop:10}}
                                     textStyle={{color:'black', textDecorationLine: "none"}}
                                     text="Do not show these instructions again"
-                                    isChecked={!showInstructions}
+                                    isChecked={!showInst}
                                     onPress={updateInstructions}
                                     disableBuiltInState={true}
                                 />

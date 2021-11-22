@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRecoilState } from 'recoil';
 import { instructionsModal } from '../atoms/InstructionsModal';
+import { showInstructions } from '../atoms/ShowInstructions';
 import Instructions from './Preview/Instructions';
 import { continueClicked } from '../atoms/ContinueClicked';
 
@@ -27,7 +28,7 @@ function Preview( { navigation } ) {
         setAtBottom(false)
     }
 
-    const [showInstructions, setShowInstructions] = useState(true);
+    const [showInst, setShowInst] = useRecoilState(showInstructions);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
 
@@ -42,7 +43,7 @@ function Preview( { navigation } ) {
         async function getData() {
             try {
               const showInts = await AsyncStorage.getItem('showInstructions')
-              setShowInstructions(showInts)
+              showInts === 'true' ? setShowInst(true) : setShowInst(false)
               } catch (error) {
                   console.log(error)
               }
@@ -83,7 +84,7 @@ function Preview( { navigation } ) {
             } 
         </View>
         <View style={styles.main}>
-            <TouchableOpacity onPress={() => showInstructions === 'true' ? setModalVisible(true) : setContinueClickedState(true)} style={styles.button}>
+            <TouchableOpacity onPress={() => showInst ? setModalVisible(true) : setContinueClickedState(true)} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
             </TouchableOpacity>
             <Instructions continueClicked={continueClicked}/>
@@ -111,6 +112,7 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     instructions: {
+        zIndex:100,
         position: 'absolute',
         backgroundColor: "#9AD3BB",
         alignItems: 'center',
