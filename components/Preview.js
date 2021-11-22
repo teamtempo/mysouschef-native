@@ -27,6 +27,7 @@ function Preview( { navigation } ) {
         setAtBottom(false)
     }
 
+    const [showInstructions, setShowInstructions] = useState(true);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
 
@@ -37,7 +38,18 @@ function Preview( { navigation } ) {
         }
     }, [continueClickedState])
 
-    
+    useEffect(() => {
+        async function getData() {
+            try {
+              AsyncStorage.getItem('@showInstructions')
+              .then((value)=> setShowInstructions(value))
+              } catch {
+                  console.log(error)
+              }
+          }
+          getData();
+          console.log("value of instructions in async",showInstructions);
+    },[])
 
     return (
         
@@ -67,7 +79,7 @@ function Preview( { navigation } ) {
             } 
         </View>
         <View style={styles.main}>
-            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
+            <TouchableOpacity onPress={() => showInstructions ? setModalVisible(true) : setModalVisible(false)} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
             </TouchableOpacity>
             <Instructions continueClicked={continueClicked}/>
