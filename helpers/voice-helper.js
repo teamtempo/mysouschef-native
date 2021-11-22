@@ -9,17 +9,17 @@ let porcupineManager
 
 Sound.setCategory('Playback');
 
-function sound() {
-  var notification2 = new Sound('notification2', Sound.MAIN_BUNDLE, (error) => {
+function blueberryDetectedSound() {
+  var notification1 = new Sound('notification1.mp3', Sound.MAIN_BUNDLE, (error) => {
       if (error) {
         console.log('failed to load the sound', error);
         return;
       }
       // loaded successfully
-      console.log('duration in seconds: ' + notification2.getDuration() + 'number of channels: ' + notification2.getNumberOfChannels());
-      notification2.setVolume(1);
+      console.log('duration in seconds: ' + notification1.getDuration() + 'number of channels: ' + notification1.getNumberOfChannels());
+      notification1.setVolume(1);
       // Play the sound with an onEnd callback
-      notification2.play((success) => {
+      notification1.play((success) => {
         if (success) {
           console.log('successfully finished playing');
         } else {
@@ -46,9 +46,12 @@ async function createPorcupineManager() {
 
 function detectionCallback(keyWordIndex) {
   if(keyWordIndex === 0) {
-    console.log("blueberry detected")
-    sound();
-    startRecording();
+    console.log("blueberry detected");
+    blueberryDetectedSound();
+    setTimeout(() => {
+      startRecording();
+    }, 1000);
+    
   } else if (keyWordIndex === 1) {
     console.log("porcupine detected")
   }

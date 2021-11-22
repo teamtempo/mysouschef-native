@@ -30,13 +30,11 @@ function CurrentStep() {
           Voice.destroy().then(Voice.removeAllListeners);
         }
       }, [])
-   
+
     useEffect(() => {
-        createPorcupineManager();
-        return () => {
-            removeListeners();
-      }
-    }, [])
+    createPorcupineManager();
+    })
+
        
     const bgs = ['#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52', '#F5CA82', '#F4E7A0', '#E7B25A', '#E18B52'];
 
