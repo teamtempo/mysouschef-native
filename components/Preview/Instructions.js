@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Modal from "react-native-modal";
 import { instructionsModal } from '../../atoms/InstructionsModal';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import { useRecoilState } from 'recoil';
 import { continueClicked } from '../../atoms/ContinueClicked';
@@ -14,6 +15,10 @@ const Instructions = ( {continueClicked} ) => {
     function nextScreen() {
         setModalVisible(false);
         setContinueClickedState(true);
+    }
+
+    function updateInstructions() {
+        console.log("whoop");
     }
     
     return ( 
@@ -71,11 +76,20 @@ const Instructions = ( {continueClicked} ) => {
                                     <Text style={{fontWeight: 'bold'}}> ● "Previous step" </Text>
                                     to go to the previous step.
                                 </Text>
+                                <BouncyCheckbox 
+                                    style={{marginTop:10}}
+                                    textStyle={{color:'black'}}
+                                    text="Do not show these instructions again"
+                                    value={true}
+                                    onPress={updateInstructions}
+                                />
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => nextScreen()} style={styles.continueButton}>
                             <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}} >Continue</Text>
                         </TouchableOpacity>
+
+
             </Modal>
         </View>
      );
@@ -109,6 +123,14 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         borderRadius: 40, 
         marginTop: 10
+    },
+    noMoreInstructions: {
+        marginTop:10,
+        flex:1,
+        color:'#000000',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 
 });
