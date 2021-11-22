@@ -9,6 +9,7 @@
  import React, { useEffect } from 'react';
  import { RecoilRoot } from 'recoil';
  import RecoilOutside from "recoil-outside"
+ import { LogBox } from 'react-native';
  
  import Dashboard from './components/Dashboard';
  import Preview from './components/Preview';
@@ -19,6 +20,8 @@
   
  const Stack = createStackNavigator();
  
+ LogBox.ignoreAllLogs();
+
 export default function App() {
 
   useEffect(() => {
