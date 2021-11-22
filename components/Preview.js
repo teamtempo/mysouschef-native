@@ -5,7 +5,7 @@ import Ingredients from './Preview/Ingredients';
 import Steps from './Preview/Steps';
 import { PorcupineManager } from '@picovoice/porcupine-react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRecoilState } from 'recoil';
 import { instructionsModal } from '../atoms/InstructionsModal';
 import Instructions from './Preview/Instructions';
@@ -27,6 +27,7 @@ function Preview( { navigation } ) {
         setAtBottom(false)
     }
 
+    const [showInstructions, setShowInstructions] = useState(true);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
 
@@ -37,12 +38,27 @@ function Preview( { navigation } ) {
         }
     }, [continueClickedState])
 
-    
+    useEffect(() => {
+        async function getData() {
+            try {
+              const showInts = await AsyncStorage.getItem('showInstructions')
+              setShowInstructions(showInts)
+              } catch (error) {
+                  console.log(error)
+              }
+          }
+          getData();
+    },[])
 
     return (
         
     <View style={styles.container}>
         <View style={styles.main}>
+            <View style={styles.instructions}>
+                <TouchableOpacity onPress={() => setModalVisible(true)} >
+                    <Text style={{fontSize: 15, fontWeight: '500', color: 'white', textAlign:'center'}}>Show Instructions</Text>
+                </TouchableOpacity>
+            </View>
             <Text style={styles.title}>Recipe</Text>
         </View>
             <ScrollView
@@ -67,7 +83,7 @@ function Preview( { navigation } ) {
             } 
         </View>
         <View style={styles.main}>
-            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
+            <TouchableOpacity onPress={() => showInstructions === 'true' ? setModalVisible(true) : setContinueClickedState(true)} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
             </TouchableOpacity>
             <Instructions continueClicked={continueClicked}/>
@@ -89,10 +105,21 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         fontWeight: '900',
-        paddingTop: 40,
+        paddingTop: 20,
         padding: 10,
         textAlign: 'center',
         color: 'white'
+    },
+    instructions: {
+        position: 'absolute',
+        backgroundColor: "#9AD3BB",
+        alignItems: 'center',
+        justifyContent:'center',
+        borderRadius: 40,
+        width: 95,
+        height: 45,
+        bottom: 10,
+        right: 10,
     },
     button: {
         alignItems: "center",

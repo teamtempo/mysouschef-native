@@ -1,13 +1,26 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import { useRecoilState } from 'recoil';
+
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Modal from "react-native-modal";
 import { instructionsModal } from '../../atoms/InstructionsModal';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { useRecoilState } from 'recoil';
 import { continueClicked } from '../../atoms/ContinueClicked';
 
-const Instructions = ( {continueClicked} ) => {
+function storeData(key, value) {
+    AsyncStorage.setItem(key, value)
+      .then(() => {
+        console.log("Stored value", value);
+      })
+      .catch((e) => {
+        alert("Error saving to AsyncStorage:" + JSON.stringify(e));
+      });
+}
 
+const Instructions = ( {continueClicked} ) => {
+    const [showInstructions, setShowInstructions] = useState(true);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
 
@@ -15,6 +28,19 @@ const Instructions = ( {continueClicked} ) => {
         setModalVisible(false);
         setContinueClickedState(true);
     }
+
+    function updateInstructions() {
+        setShowInstructions(!showInstructions)
+        const timer = setTimeout(() => {
+            storeData(("showInstructions"), JSON.stringify(!showInstructions))
+        }, 1);
+          return () => clearTimeout(timer);
+    }
+
+/*     useEffect(() => {
+        console.log(showInstructions)
+        updateInstructions(showInstructions)
+    },[showInstructions]) */
     
     return ( 
         <View>
@@ -71,11 +97,21 @@ const Instructions = ( {continueClicked} ) => {
                                     <Text style={{fontWeight: 'bold'}}> ● "Previous step" </Text>
                                     to go to the previous step.
                                 </Text>
+                                <BouncyCheckbox 
+                                    style={{marginTop:10}}
+                                    textStyle={{color:'black', textDecorationLine: "none"}}
+                                    text="Do not show these instructions again"
+                                    isChecked={!showInstructions}
+                                    onPress={updateInstructions}
+                                    disableBuiltInState={true}
+                                />
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => nextScreen()} style={styles.continueButton}>
                             <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}} >Continue</Text>
                         </TouchableOpacity>
+
+
             </Modal>
         </View>
      );
@@ -109,6 +145,14 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         borderRadius: 40, 
         marginTop: 10
+    },
+    noMoreInstructions: {
+        marginTop:10,
+        flex:1,
+        color:'#000000',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 
 });

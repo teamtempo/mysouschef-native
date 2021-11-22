@@ -12,7 +12,6 @@ function storeData(key, value) {
     AsyncStorage.setItem(key, value)
       .then(() => {
         console.log("Stored value", value);
-      
       })
       .catch((e) => {
         alert("Error saving to AsyncStorage:" + JSON.stringify(e));

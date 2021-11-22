@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList, ScrollView } from 'react-native'
 import { useRecoilValue } from 'recoil';
 import HistoryItem from './HistoryItem';
 import { pastLinks } from '../../atoms/PastLinks';
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
 });
-
+ 
 
 export default History;

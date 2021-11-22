@@ -83,8 +83,12 @@ function Dashboard({ navigation }) {
         AsyncStorage.getAllKeys()
         .then((keys)=> AsyncStorage.multiGet(keys)
             .then((data) => {
-            setPastLinksState(data.map((link) => ({ key: link[0], value: link[1] })))
-            }))
+            setPastLinksState(data
+              .map((link) => ({ key: link[0], value: link[1] }))
+              .filter(obj => obj.key !== 'showInstructions')
+              )
+            })
+          )
         } catch {
             console.log(error)
         }
