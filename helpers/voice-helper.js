@@ -50,7 +50,7 @@ function detectionCallback(keyWordIndex) {
     blueberryDetectedSound();
     setTimeout(() => {
       startRecording();
-    }, 1000);
+    }, 700);
   } else if (keyWordIndex === 1) {
     console.log("porcupine detected")
   }
