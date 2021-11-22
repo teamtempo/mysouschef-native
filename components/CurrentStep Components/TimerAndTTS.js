@@ -50,6 +50,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             || voiceResultsState.includes("begin timer")
             || voiceResultsState.includes("begin")
             || voiceResultsState.includes("resume")) {
+                say("timer started")
                 startTimer();
             } else if (voiceResultsState.includes("read instructions")
             || voiceResultsState.includes("read step")
@@ -86,12 +87,14 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                 if (index+1 < steps.length) {
                     setCurrentIndex(index+1);
                     scrollToIndex(index + 1)
+                    say(`step ${currentIndex}`)
                 }
             } else if (voiceResultsState.includes("previous step")
             || voiceResultsState.includes("previous")) {
                 if (index-1 >= 0) {
                     setCurrentIndex(index-1);
                     scrollToIndex(index - 1)
+                    say(`step ${currentIndex}`)
                 }
             } else if (voiceResultsState !== "") {
                 say("I didnt understand the command, please try again");
