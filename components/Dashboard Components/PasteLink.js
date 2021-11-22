@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Switch } from 'rea
 import axios from 'axios'
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
+import { loading } from '../../atoms/Loading';
 import { ingredientsState } from '../../atoms/Ingredients';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { unitChoice } from '../../atoms/UnitChoice';
@@ -11,7 +12,6 @@ function storeData(key, value) {
     AsyncStorage.setItem(key, value)
       .then(() => {
         console.log("Stored value", value);
-      
       })
       .catch((e) => {
         alert("Error saving to AsyncStorage:" + JSON.stringify(e));
@@ -20,7 +20,8 @@ function storeData(key, value) {
 
 function PasteLink( { navigation } ) {
     const textInput = useRef();
-    const [url, setURL] = useState()
+    const [url, setURL] = useState();
+    const[isLoading, setIsLoading] = useRecoilState(loading);
 
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
@@ -56,11 +57,14 @@ function PasteLink( { navigation } ) {
     }, [initIngredients])
 
     async function fetchData() {
+        setIsLoading(true);
         let res;
         if (ImperialIsEnabled) {
             res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=imperial`);
+            setIsLoading(false);
         } else {
             res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
+            setIsLoading(false);
         }
         
         if (res.data === "Site not yet supported") {
@@ -82,33 +86,31 @@ function PasteLink( { navigation } ) {
     
     return (
         <View>
-    <View style={styles.container}>
-        <View style= {{ flexDirection: 'row', alignItems: 'center'}}>
-        <TextInput 
-            ref={textInput}
-            style={styles.input}
-            placeholder='paste recipe url here'
-            onPressIn={() => textInput.current.clear()}
-            onChangeText={(val) => setURL(val)}/>
-            <TouchableOpacity style={styles.button} onPress={fetchData}>
-                <Text style={{ color: '#000000' }}>GO</Text>
-            </TouchableOpacity> 
-        </View>
+        <View style={styles.container}>
+            <View style= {{ flexDirection: 'row', alignItems: 'center'}}>
+                <TextInput 
+                    ref={textInput}
+                    style={styles.input}
+                    placeholder='paste recipe url here'
+                    onPressIn={() => textInput.current.clear()}
+                    onChangeText={(val) => setURL(val)}/>
+                <TouchableOpacity style={styles.button} onPress={fetchData}>
+                    <Text style={{ color: '#000000' }}>GO</Text>
+                </TouchableOpacity> 
+            </View>
             
             <View style={styles.switch}>
                 {showUnitChoice()}
-                                  <Switch
-                                    trackColor={{ false: "#767577", true: "#9AD3BB" }}
-                                    thumbColor={ImperialIsEnabled ? "#F5B463" : "#f4f3f4"}
-                                    ios_backgroundColor="#3e3e3e"
-                                    onValueChange={toggleSwitch}
-                                    value={ImperialIsEnabled}
-                                  />
-                                </View>
+                <Switch
+                trackColor={{ false: "#767577", true: "#9AD3BB" }}
+                thumbColor={ImperialIsEnabled ? "#F5B463" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={ImperialIsEnabled}
+                />
+            </View>
         </View>
-        
-        </View>
-       
+    </View>
     )
 
 }

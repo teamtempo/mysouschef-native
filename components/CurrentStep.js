@@ -15,12 +15,6 @@ function CurrentStep() {
     const [steps, setSteps] = useRecoilState(stepsState);
     const flatListRef = useRef();
 
-    // checking on the speech service
-    useEffect(async() => {
-        console.log("voice check:", await Voice.getSpeechRecognitionServices());
-        console.log("voice check:", await Voice.isAvailable());
-    },[]);
-
     useEffect(() => {
         Voice.onSpeechStart = onSpeechStartHandler;
         Voice.onSpeechEnd = onSpeechEndHandler;
@@ -118,7 +112,6 @@ function CurrentStep() {
 
     const scrollToIndex = (i) => {
         flatListRef.current.scrollToIndex({index: i});
-        //console.log(getNativeScrollRef());
     }
 
     const _onViewableItemsChanged = useCallback(({ viewableItems, changed }) => {

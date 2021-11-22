@@ -15,6 +15,8 @@ target 'mysouschefnative' do
   pod 'react-native-voice', :path => '../node_modules/@react-native-voice/voice'
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
 
   target 'mysouschefnativeTests' do
     inherit! :complete

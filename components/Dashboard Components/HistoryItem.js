@@ -6,6 +6,7 @@ import { pastLinks } from '../../atoms/PastLinks';
 import axios from 'axios'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
+import { loading } from '../../atoms/Loading';
 import { ingredientsState } from '../../atoms/Ingredients';
 
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -13,14 +14,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { unitChoice } from '../../atoms/UnitChoice';
 
 const HistoryItem = ({navigation, item}) => {
-    const links = useRecoilValue(pastLinks);
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
-    const steps = useRef(initSteps)
-
+    const [isLoading, setIsLoading] = useRecoilState(loading);
     const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
-    const ingredients = useRef(initIngredients)
-
     const [ImperialIsEnabled, setImperialIsEnabled] = useRecoilState(unitChoice);
+    
+    const links = useRecoilValue(pastLinks);
+    
+    const steps = useRef(initSteps)
+    const ingredients = useRef(initIngredients)
 
     useEffect(() => {
         steps.current = initSteps
@@ -32,13 +34,16 @@ const HistoryItem = ({navigation, item}) => {
 
     //hello
     async function getLink() {
+        setIsLoading(true);
         let res;
         let clickedItem = links.find(link => link.value === item);
         let link = clickedItem.key.slice(1);
         if (ImperialIsEnabled) {
             res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=imperial`);
+            setIsLoading(false);
         } else {
             res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
+            setIsLoading(false);
         }
         navigation.navigate('Preview')  
         setInitSteps(res.data.slice(2));
