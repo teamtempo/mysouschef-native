@@ -9,10 +9,7 @@ function History({ navigation }) {
 
     return (
         <View style={styles.container}>
-        <ScrollView >
            <FlatList data={previous} renderItem={({ item }) => <HistoryItem item={item.value} navigation={navigation}/>} keyExtractor={item => item.key}/>
-        </ScrollView>
-
         </View>
     )
 }

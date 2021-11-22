@@ -54,6 +54,11 @@ function Preview( { navigation } ) {
         
     <View style={styles.container}>
         <View style={styles.main}>
+            <View style={styles.instructions}>
+                <TouchableOpacity onPress={() => setModalVisible(true)} >
+                    <Text style={{fontSize: 15, fontWeight: '500', color: 'white', textAlign:'center'}}>Show Instructions</Text>
+                </TouchableOpacity>
+            </View>
             <Text style={styles.title}>Recipe</Text>
         </View>
             <ScrollView
@@ -100,10 +105,21 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         fontWeight: '900',
-        paddingTop: 40,
+        paddingTop: 20,
         padding: 10,
         textAlign: 'center',
         color: 'white'
+    },
+    instructions: {
+        position: 'absolute',
+        backgroundColor: "#9AD3BB",
+        alignItems: 'center',
+        justifyContent:'center',
+        borderRadius: 40,
+        width: 95,
+        height: 45,
+        bottom: 10,
+        right: 10,
     },
     button: {
         alignItems: "center",
