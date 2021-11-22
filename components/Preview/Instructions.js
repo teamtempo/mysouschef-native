@@ -20,7 +20,7 @@ function storeData(key, value) {
 }
 
 const Instructions = ( {continueClicked} ) => {
-    let showInstructions;
+    const [showInstructions, setShowInstructions] = useState(true);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
 
@@ -29,17 +29,18 @@ const Instructions = ( {continueClicked} ) => {
         setContinueClickedState(true);
     }
 
-    function updateInstructions(value) {
+    function updateInstructions() {
+        setShowInstructions(!showInstructions)
         const timer = setTimeout(() => {
-            storeData(("@showInstructions"), value);
-          }, 1);
+            storeData(("showInstructions"), JSON.stringify(!showInstructions))
+        }, 1);
           return () => clearTimeout(timer);
     }
 
-    useEffect(() => {
+/*     useEffect(() => {
         console.log(showInstructions)
         updateInstructions(showInstructions)
-    },[showInstructions])
+    },[showInstructions]) */
     
     return ( 
         <View>
@@ -101,7 +102,7 @@ const Instructions = ( {continueClicked} ) => {
                                     textStyle={{color:'black', textDecorationLine: "none"}}
                                     text="Do not show these instructions again"
                                     isChecked={!showInstructions}
-                                    onPress={() => showInstructions = !showInstructions}
+                                    onPress={updateInstructions}
                                     disableBuiltInState={true}
                                 />
                             </View>

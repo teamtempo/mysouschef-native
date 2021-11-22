@@ -5,7 +5,7 @@ import Ingredients from './Preview/Ingredients';
 import Steps from './Preview/Steps';
 import { PorcupineManager } from '@picovoice/porcupine-react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRecoilState } from 'recoil';
 import { instructionsModal } from '../atoms/InstructionsModal';
 import Instructions from './Preview/Instructions';
@@ -41,14 +41,14 @@ function Preview( { navigation } ) {
     useEffect(() => {
         async function getData() {
             try {
-              AsyncStorage.getItem('@showInstructions')
-              .then((value)=> setShowInstructions(value))
-              } catch {
+              const showInts = await AsyncStorage.getItem('showInstructions')
+              setShowInstructions(showInts)
+              console.log("value of instructions in async",typeof(showInts));
+              } catch (error) {
                   console.log(error)
               }
           }
           getData();
-          console.log("value of instructions in async",showInstructions);
     },[])
 
     return (
@@ -79,7 +79,7 @@ function Preview( { navigation } ) {
             } 
         </View>
         <View style={styles.main}>
-            <TouchableOpacity onPress={() => showInstructions ? setModalVisible(true) : setModalVisible(false)} style={styles.button}>
+            <TouchableOpacity onPress={() => showInstructions === 'true' ? setModalVisible(true) : setContinueClickedState(true)} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
             </TouchableOpacity>
             <Instructions continueClicked={continueClicked}/>
