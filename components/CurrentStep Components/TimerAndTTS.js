@@ -104,27 +104,6 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
         }
     }
                     
-             
-                       
-                     
-                      
-                
-                  
-                
-        
-           
-                   
-         
-    
-          
-             
-            
-           
-            
-               
-              
-            
-
     const speak = () => {
         say(`Step ${step}, ${instructions}`)
     }
