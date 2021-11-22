@@ -94,7 +94,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                     scrollToIndex(index - 1)
                 }
             } else if (voiceResultsState !== "") {
-                say("Didnt understand the command, please try again");
+                say("I didnt understand the command, please try again");
             }
         
         }
