@@ -1,7 +1,9 @@
 import {useRecoilState, useRecoilValue} from 'recoil';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect } from 'react'
-import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, ActivityIndicator, Text } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import Modal from "react-native-modal";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { StyleSheet, View, Keyboard, Image, TouchableWithoutFeedback, KeyboardAvoidingView, PermissionsAndroid, ActivityIndicator, Text, TouchableOpacity, Linking } from 'react-native';
 
 import Instructions from './Dashboard Components/Instructions';
 import PasteLink from './Dashboard Components/PasteLink';
@@ -12,6 +14,7 @@ import { pastLinks } from '../atoms/PastLinks';
 import { micPermission } from '../atoms/MicPermission';
 
 function Dashboard({ navigation }) {
+    const [modalVisible, setModalVisible] = useState(false);
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
     const [micPermissionState, setMicPermissionState] = useRecoilState(micPermission);
     const isLoading = useRecoilValue(loading);
@@ -135,8 +138,44 @@ function Dashboard({ navigation }) {
                   <View style={styles.item}>
                       <History navigation={navigation}/>
                   </View>
+                  <View style={{paddingTop: 15}}>
+                    <Text onPress={() => setModalVisible(true)} style={{color: "#F3EAC2"}}> © Team Tempo 2021 </Text>
+                  </View>
               </View>
           </View>
+          <Modal isVisible={modalVisible} backdropOpacity={0.5} onBackdropPress={() => setModalVisible(false)}>
+            <View style={styles.modal}>
+                <Text style={styles.modalHeading}>About Us</Text>
+              <Text style={styles.modalDescription}>MySousChef was developed by Team Tempo for their senior project whilst at Code Chrysalis - a full stack coding bootcamp in Tokyo.</Text>
+              <Text style={styles.modalTeamHeading}>Team Tempo</Text>
+
+                <View style={styles.modelMemberSet}>
+                  <Text style={styles.modalMember}>•   Kimiko Escovilla</Text>
+                  <TouchableOpacity onPress={() => Linking.openURL('https://www.linkedin.com/in/kimikoescovilla/')}>
+                    <Icon name="linkedin-square" size={30} color="#9AD3BB"/>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.modelMemberSet}>
+                  <Text style={styles.modalMember}>•   Valters Klauze</Text>
+                  <TouchableOpacity onPress={() => Linking.openURL('https://github.com/valch1992')}>
+                    <Icon name="github-square" size={30} color="#9AD3BB"/>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.modelMemberSet}>
+                  <Text style={styles.modalMember}>•   James Balcombe</Text>
+                  <TouchableOpacity onPress={() => Linking.openURL('https://twitter.com/CodeWithMrB')}>
+                    <Icon name="twitter-square" size={30} color="#9AD3BB"/> 
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.modelFooter}>Feel free to get in touch with us!</Text>
+            </View>
+            <View style={styles.modalButton}>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Text style={{color: '#fff', fontWeight: '900', fontSize: 20}}> Close </Text>
+              </TouchableOpacity>
+            </View>
+          </Modal>
       </View>
   </KeyboardAvoidingView>
 </TouchableWithoutFeedback>
@@ -184,7 +223,52 @@ const styles = StyleSheet.create({
         width: 250,
         height: 150
     },
-    
+    modal: {
+      backgroundColor: '#fff',
+      padding: 27,
+      borderRadius: 30,
+      alignItems: 'center'
+    },
+    modalHeading: {
+      padding: 20,
+      fontSize: 25,
+      fontWeight: '600',
+      color: 'black',
+    },
+    modalDescription: {
+      fontSize: 15,
+      textAlign: 'justify',
+      color: 'black',
+      paddingBottom: 15
+    },
+    modalTeamHeading: {
+      fontSize: 20,
+      paddingBottom: 10,
+      fontWeight: '600',
+      color: 'black',
+    },
+    modelMemberSet: {
+      width: 200,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    modalMember: {
+      color: 'black',
+      fontSize: 15,
+    },
+    modelFooter: {
+      paddingTop: 40,
+      color: 'black',
+      fontSize: 15
+    },
+    modalButton: {
+      marginTop: 15,
+      backgroundColor: '#F5B463',
+      padding: 20,
+      borderRadius: 30,
+      alignItems: 'center'
+    }
 });
 
 export default Dashboard;
