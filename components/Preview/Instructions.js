@@ -27,7 +27,7 @@ const Instructions = ( {continueClicked} ) => {
 
     function nextScreen() {
         setModalVisible(false);
-        setContinueClickedState(true);
+        setContinueClickedState(true); 
     }
 
     function updateInstructions() {
