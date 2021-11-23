@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -11,6 +11,10 @@ import { voiceResults } from '../../atoms/VoiceResults';
 import { stepsState } from '../../atoms/Steps';
 import { currentStepIndex } from '../../atoms/CurrentStepIndex';
 
+import Sound from 'react-native-sound';
+
+
+
 const formatNumber = number => `0${number}`.slice(-2);
 
 const getRemaining = (time) => {
@@ -20,6 +24,8 @@ const getRemaining = (time) => {
     return { hours: formatNumber(hours), minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
 }
 
+
+
 const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const [remainingSecs, setRemainingSecs] = useState(time);
@@ -28,6 +34,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
     
+
     useEffect(() => {
         voiceController();
     },[voiceResultsState]);
@@ -35,64 +42,70 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const voiceController = () => {
         if (currentIndex === index) {
             if (voiceResultsState.includes("stop timer")
-            || voiceResultsState.includes("pause timer")) {
+            || voiceResultsState.includes("pause timer")
+            || voiceResultsState.includes("pause")
+            || voiceResultsState.includes("stop")) {
+                say("timer stopped")
                 stopTimer();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("start") 
+            } else if (voiceResultsState.includes("start") 
             || voiceResultsState.includes("go")
+            || voiceResultsState.includes("start timer")
+            || voiceResultsState.includes("begin timer")
             || voiceResultsState.includes("begin")
             || voiceResultsState.includes("resume")) {
+                say("timer started")
                 startTimer();
-                setVoiceResultsState("");
-            } 
-            if (voiceResultsState.includes("read instructions")
+            } else if (voiceResultsState.includes("read instructions")
             || voiceResultsState.includes("read step")
+            || voiceResultsState.includes("instructions")
             || voiceResultsState.includes("read the instructions")) {
-                console.log(step, instructions)
-               speak();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("extend")
+                console.log(step, instructions) 
+                speak();
+            } else if (voiceResultsState.includes("extend")
             || voiceResultsState.includes("add")
+            || voiceResultsState.includes("increase timer")
+            || voiceResultsState.includes("extend timer")
+            || voiceResultsState.includes("increase timer")
             || voiceResultsState.includes("increase")
             || voiceResultsState.includes("more")) {
                 addTime();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("subtract")
+                    
+            } else if (voiceResultsState.includes("subtract")
+            || voiceResultsState.includes("decrease timer")
+            || voiceResultsState.includes("reduce timer")
             || voiceResultsState.includes("decrease")
             || voiceResultsState.includes("reduce")) {
                 subtractTime();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("reset")
-            || voiceResultsState.includes("restart")) {
+                
+            } else if (voiceResultsState.includes("reset")
+            || voiceResultsState.includes("restart")
+            || voiceResultsState.includes("restart timer")
+            || voiceResultsState.includes("restart timer")) {
                 resetTimer();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes('stop reading')) {
+                   
+            } else if (voiceResultsState.includes('stop reading')) {
                 Tts.stop();
-                setVoiceResultsState("");
-            }
-            if (voiceResultsState.includes("next step")) {
+            } else if (voiceResultsState.includes("next step")
+            || voiceResultsState.includes("next")) {
                 if (index+1 < steps.length) {
                     setCurrentIndex(index+1);
                     scrollToIndex(index + 1)
-                    setVoiceResultsState("");
+                    say(`step ${currentIndex+2}`)
                 }
-            }
-            if (voiceResultsState.includes("previous step")) {
+            } else if (voiceResultsState.includes("previous step")
+            || voiceResultsState.includes("previous")) {
                 if (index-1 >= 0) {
                     setCurrentIndex(index-1);
                     scrollToIndex(index - 1)
-                    setVoiceResultsState("");
+                    say(`step ${currentIndex}`)
                 }
-
+            } else if (voiceResultsState !== "") {
+                say("I didnt understand the command, please try again");
             }
+        
         }
     }
-
+                    
     const speak = () => {
         say(`Step ${step}, ${instructions}`)
     }
@@ -122,10 +135,33 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
         setRemainingSecs(remainingSecs - 60);
     }
 
+    function alarm() {
+        var alarm = new Sound('alarm.mp3', Sound.MAIN_BUNDLE, (error) => {
+            if (error) {
+              console.log('failed to load the sound', error);
+              return;
+            }
+            console.log('duration in seconds: ' + alarm.getDuration() + 'number of channels: ' + alarm.getNumberOfChannels());
+            alarm.setVolume(1);
+
+            alarm.play((success) => {
+              if (success) {
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
+          });
+        
+      }
+
     useEffect(() => {
         if (remainingSecs === 0) {
             setIsActive(false)
             alert("Timer is done!")
+        }
+        if (remainingSecs === 1) {
+            alarm();
         }
     }, [remainingSecs])
 
@@ -165,7 +201,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.timerIcon} onPress={addTime}>
                         <Icon name="plus-circle" size={40} color="#9AD3BB"/> 
-                    </TouchableOpacity>  
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     { remainingSecs === 0 || !remainingSecs ? 
