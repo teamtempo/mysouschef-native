@@ -11,6 +11,8 @@ import { voiceResults } from '../../atoms/VoiceResults';
 import { stepsState } from '../../atoms/Steps';
 import { currentStepIndex } from '../../atoms/CurrentStepIndex';
 
+import Sound from 'react-native-sound';
+
 
 
 const formatNumber = number => `0${number}`.slice(-2);
@@ -133,10 +135,33 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
         setRemainingSecs(remainingSecs - 60);
     }
 
+    function alarm() {
+        var alarm = new Sound('alarm.mp3', Sound.MAIN_BUNDLE, (error) => {
+            if (error) {
+              console.log('failed to load the sound', error);
+              return;
+            }
+            console.log('duration in seconds: ' + alarm.getDuration() + 'number of channels: ' + alarm.getNumberOfChannels());
+            alarm.setVolume(1);
+
+            alarm.play((success) => {
+              if (success) {
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
+          });
+        
+      }
+
     useEffect(() => {
         if (remainingSecs === 0) {
             setIsActive(false)
             alert("Timer is done!")
+        }
+        if (remainingSecs === 1) {
+            alarm();
         }
     }, [remainingSecs])
 
