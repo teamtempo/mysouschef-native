@@ -37,7 +37,7 @@ const Instructions = ( {continueClicked} ) => {
         }, 1);
           return () => clearTimeout(timer);
     }
-    
+    //
     return ( 
         <View>
             <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
