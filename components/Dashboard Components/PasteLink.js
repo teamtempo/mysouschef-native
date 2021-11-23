@@ -7,6 +7,8 @@ import { loading } from '../../atoms/Loading';
 import { ingredientsState } from '../../atoms/Ingredients';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { unitChoice } from '../../atoms/UnitChoice';
+import { pastLinks } from '../../atoms/PastLinks';
+import { linkUpdate } from '../../atoms/LinkUpdate';
 
 function storeData(key, value) {
     AsyncStorage.setItem(key, value)
@@ -22,6 +24,8 @@ function PasteLink( { navigation } ) {
     const textInput = useRef();
     const [url, setURL] = useState();
     const[isLoading, setIsLoading] = useRecoilState(loading);
+    const [links, setLinks] = useRecoilState(pastLinks);
+    const [linkUpdated, setLinkUpdated] = useRecoilState(linkUpdate);
 
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const steps = useRef(initSteps)
@@ -38,7 +42,6 @@ function PasteLink( { navigation } ) {
         } else {
             return <Text style={{ fontSize: 14, color: 'black'}}>Measurements are shown in Imperial units</Text>
         }
-
     }
 
     const addHistory = (key, value) => {
@@ -77,7 +80,10 @@ function PasteLink( { navigation } ) {
             alert("The url provided must include http:// or https://") 
         } else {
             navigation.navigate('Preview')
-            addHistory(url, JSON.stringify([res.data[0].title, new Date()]));
+            const aData = new Date();
+            addHistory(url, JSON.stringify([res.data[0].title, aData]));
+            setLinks([...links, {key: url, value: res.data[0].title, time: aData}])
+            setLinkUpdated(true);
             setInitIngredients(res.data[1])
             setInitSteps(res.data.slice(2));
             textInput.current.clear();

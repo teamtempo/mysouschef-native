@@ -12,14 +12,16 @@ import { ingredientsState } from '../../atoms/Ingredients';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { unitChoice } from '../../atoms/UnitChoice';
+import { linkUpdate } from '../../atoms/LinkUpdate';
 
 const HistoryItem = ({navigation, item}) => {
     const [initSteps, setInitSteps] = useRecoilState(stepsState);
     const [isLoading, setIsLoading] = useRecoilState(loading);
+    const [linkUpdated, setLinkUpdated] = useRecoilState(linkUpdate);
     const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
     const [ImperialIsEnabled, setImperialIsEnabled] = useRecoilState(unitChoice);
     
-    const links = useRecoilValue(pastLinks);
+    const [links, setLinks] = useRecoilState(pastLinks);
     
     const steps = useRef(initSteps)
     const ingredients = useRef(initIngredients)
@@ -54,6 +56,8 @@ const HistoryItem = ({navigation, item}) => {
         let deletedItem = links.find(link => link.value === item);
         try {
             await AsyncStorage.removeItem(deletedItem.key);
+            setLinks(links.filter(link => link.value !== item))
+            setLinkUpdated(true);
             console.log('Data removed')
         }
         catch(exception) {
