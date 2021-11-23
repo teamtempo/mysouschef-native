@@ -74,7 +74,7 @@ const HistoryItem = ({navigation, item}) => {
             </View>
             <View style={styles.icons}>
                 <TouchableOpacity onPress={getLink}>
-                        <Icon name="check-circle" size={25} color="#9AD3BB"/>
+                        <Icon name="arrow-circle-right" size={25} color="#9AD3BB"/>
                 </TouchableOpacity>
             </View>
         </View>
