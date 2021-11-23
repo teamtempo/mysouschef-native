@@ -12,10 +12,12 @@ import History from './Dashboard Components/History';
 import { loading } from '../atoms/Loading';
 import { pastLinks } from '../atoms/PastLinks';
 import { micPermission } from '../atoms/MicPermission';
+import { linkUpdate } from '../atoms/LinkUpdate';
 
 function Dashboard({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
+    const [linkUpdated, setLinkUpdated] = useRecoilState(linkUpdate);
     const [micPermissionState, setMicPermissionState] = useRecoilState(micPermission);
     const isLoading = useRecoilValue(loading);
 
@@ -41,73 +43,44 @@ function Dashboard({ navigation }) {
           console.warn(err);
         }
       };
-
-      async function createPorcupineManager() {
-        try {
-          
-          porcupineManager = await PorcupineManager.fromKeywords(
-            ["blueberry", "porcupine"],
-            detectionCallback)
-            console.log(porcupineManager);
-            console.log("porcupine started")
     
-        } catch(err) {
-          console.log(err);
-        }
-      }
-    
-      function detectionCallback(keyWordIndex) {
-        if(keyWordIndex === 0) {
-          console.log("blueberry detected")
-        } else if (keyWordIndex === 1) {
-          console.log("porcupine detected")
-        }
-      }
-    
-      async function addListener() {
-        await porcupineManager.start();
-        console.log("started")
-      }
-    
-      async function stopListener() {
-        await porcupineManager.stop();
-        console.log("stopped")
-       
-      }
-    
-      async function removeListeners() {
-        await porcupineManager.delete();
-        console.log("deleted")
-      }
-    
-
     async function getData() {
       try {
         AsyncStorage.getAllKeys()
         .then((keys)=> AsyncStorage.multiGet(keys)
             .then((data) => {
-            setPastLinksState(data
-              .map((link) => ({ key: link[0], value: link[1] }))
-              .filter(obj => obj.key !== 'showInstructions')
-              )
-            })
+              let stuff = data.map((link) => {
+                const dataArr = JSON.parse(link[1]);
+                return ({ key: link[0], value: dataArr[0], time: `${dataArr[1]}` })
+              }).filter(obj => obj.key !== 'showInstructions')
+              stuff = stuff.sort((a,b) => new Date(b.time) - new Date(a.time) )
+            setPastLinksState(stuff)
+            }).catch(error => console.log(error)) 
           )
         } catch {
             console.log(error)
         }
     }
 
+    function show() {
+      pastLinksState.forEach(link => {
+        console.log(link.value, (link.time))
+      })
+    }
+
     useEffect(() => {
+      if (linkUpdated) {
         getData();
-      }, [pastLinksState]);
+        setLinkUpdated(false);
+      }
+    }, [linkUpdated]);
 
+      
     useEffect(() => {
-        requestAudioPermission();
-        console.log(isLoading)
-        }, []);
+      requestAudioPermission();
+      console.log(isLoading)
+    }, []);
 
-
-  
     const logo = { uri: 'https://i.ibb.co/SyzsG9g/My-Sous-Chef-removebg-preview.png'}
     return (
       <TouchableWithoutFeedback onPress={() => {
