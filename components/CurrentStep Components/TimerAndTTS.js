@@ -156,7 +156,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
       }
 
     useEffect(() => {
-        if (remainingSecs === 0) {
+        if (remainingSecs === 0 && isActive === true) {
             setIsActive(false)
             alert("Timer is done!")
         }
@@ -193,9 +193,15 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             }
             <View style={{flex: 0.6, marginTop: 40}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
+                    { remainingSecs < 60 ? 
+                    <TouchableOpacity style={styles.timerIcon}>
+                        <Icon name="minus-circle" size={40} color="#E8EBEF"/>
+                    </TouchableOpacity>
+                    :
                     <TouchableOpacity style={styles.timerIcon} onPress={subtractTime}>
                         <Icon name="minus-circle" size={40} color="#9AD3BB"/>
                     </TouchableOpacity>
+                    }
                     <TouchableOpacity style={styles.adjustTimer} onPress={resetTimer}>
                         <Text style={{fontSize: 15, color: '#000000'}}> Reset </Text>
                     </TouchableOpacity>
