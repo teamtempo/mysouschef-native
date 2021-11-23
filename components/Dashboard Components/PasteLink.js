@@ -43,7 +43,7 @@ function PasteLink( { navigation } ) {
 
     const addHistory = (key, value) => {
         const timer = setTimeout(() => {
-            storeData(("@"+key), value);
+            storeData(key, value);
           }, 1);
           return () => clearTimeout(timer);
     }
@@ -74,10 +74,10 @@ function PasteLink( { navigation } ) {
         } else if (res.data === "No recipe found on page") {
             alert("No recipe found on page, try another recipe")
         } else if (res.data.includes("url provided must include")) {
-            alert("The url provided must include http:// or https://")  
+            alert("The url provided must include http:// or https://") 
         } else {
             navigation.navigate('Preview')
-            addHistory(url, `${res.data[0].title}`);
+            addHistory(url, JSON.stringify([res.data[0].title, new Date()]));
             setInitIngredients(res.data[1])
             setInitSteps(res.data.slice(2));
             textInput.current.clear();

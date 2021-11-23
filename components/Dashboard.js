@@ -84,7 +84,10 @@ function Dashboard({ navigation }) {
         .then((keys)=> AsyncStorage.multiGet(keys)
             .then((data) => {
             setPastLinksState(data
-              .map((link) => ({ key: link[0], value: link[1] }))
+              .map((link) => {
+                const dataArr = JSON.parse(link[1]);
+                return ({ key: link[0], value: dataArr[0] })
+              })
               .filter(obj => obj.key !== 'showInstructions')
               )
             })
