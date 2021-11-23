@@ -47,6 +47,7 @@ function PasteLink( { navigation } ) {
     const addHistory = (key, value) => {
         const timer = setTimeout(() => {
             storeData(key, value);
+            setLinkUpdated(true);
           }, 1);
           return () => clearTimeout(timer);
     }
@@ -82,8 +83,6 @@ function PasteLink( { navigation } ) {
             navigation.navigate('Preview')
             const aData = new Date();
             addHistory(url, JSON.stringify([res.data[0].title, aData]));
-            setLinks([...links, {key: url, value: res.data[0].title, time: aData}])
-            setLinkUpdated(true);
             setInitIngredients(res.data[1])
             setInitSteps(res.data.slice(2));
             textInput.current.clear();
