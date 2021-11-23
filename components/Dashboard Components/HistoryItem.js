@@ -60,7 +60,7 @@ const HistoryItem = ({navigation, item}) => {
             console.log(exception)
         }
     }
-    
+    //
     return (
         
         <View style={ styles.container }>
