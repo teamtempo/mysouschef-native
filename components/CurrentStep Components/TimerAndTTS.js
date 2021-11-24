@@ -170,7 +170,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
 
 
     useEffect(() => {
-        if (remainingSecs === 58) {
+        if (remainingSecs === 0) {
             setIsActive(false)
             setModalVisible(true)
         }
