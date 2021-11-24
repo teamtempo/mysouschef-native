@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Tts from 'react-native-tts';
 
-import say from '../../helpers/tts-helper';
-
 import { voiceResults } from '../../atoms/VoiceResults';
 import { stepsState } from '../../atoms/Steps';
 import { currentStepIndex } from '../../atoms/CurrentStepIndex';
+import { removeListeners, say } from '../../helpers/voice-helper';
 
 import Sound from 'react-native-sound';
 
@@ -46,8 +45,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
         if (currentIndex === index) {
             if (voiceResultsState.includes("stop timer")
             || voiceResultsState.includes("pause timer")
-            || voiceResultsState.includes("pause")
-            || voiceResultsState.includes("stop")) {
+            || voiceResultsState.includes("pause")) {
                 say("timer stopped")
                 stopTimer();
             } else if (voiceResultsState.includes("start") 
@@ -72,20 +70,17 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             || voiceResultsState.includes("increase")
             || voiceResultsState.includes("more")) {
                 addTime();
-                    
             } else if (voiceResultsState.includes("subtract")
             || voiceResultsState.includes("decrease timer")
             || voiceResultsState.includes("reduce timer")
             || voiceResultsState.includes("decrease")
             || voiceResultsState.includes("reduce")) {
                 subtractTime();
-                
             } else if (voiceResultsState.includes("reset")
             || voiceResultsState.includes("restart")
             || voiceResultsState.includes("restart timer")
             || voiceResultsState.includes("restart timer")) {
                 resetTimer();
-                   
             } else if (voiceResultsState.includes('stop reading')) {
                 Tts.stop();
             } else if (voiceResultsState.includes("next step")
@@ -106,11 +101,12 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                 }
             } else if (voiceResultsState !== "") {
                 say("I didnt understand the command, please try again");
-            } else if (voiceResultsState === "close" && modalVisible) {
+            } else if (voiceResultsState.includes("close") && modalVisible) {
                 setModalVisible(false);
             }
         
         }
+        setVoiceResultsState("");
     }
                     
     const speak = () => {
@@ -170,7 +166,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
 
 
     useEffect(() => {
-        if (remainingSecs === 0) {
+        if (remainingSecs === 0 && isActive === true) {
             setIsActive(false)
             setModalVisible(true)
         }
@@ -223,9 +219,15 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             </Modal>
             <View style={{flex: 0.6, marginTop: 40}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
+                    { remainingSecs < 60 ? 
+                    <TouchableOpacity style={styles.timerIcon}>
+                        <Icon name="minus-circle" size={40} color="#E8EBEF"/>
+                    </TouchableOpacity>
+                    :
                     <TouchableOpacity style={styles.timerIcon} onPress={subtractTime}>
                         <Icon name="minus-circle" size={40} color="#9AD3BB"/>
                     </TouchableOpacity>
+                    }
                     <TouchableOpacity style={styles.adjustTimer} onPress={resetTimer}>
                         <Text style={{fontSize: 15, color: '#000000'}}> Reset </Text>
                     </TouchableOpacity>

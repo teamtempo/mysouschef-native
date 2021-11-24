@@ -7,6 +7,7 @@ import Voice from '@react-native-voice/voice';
 import { currentStepIndex } from '../atoms/CurrentStepIndex';
 import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResultsHandler, createPorcupineManager, removeListeners } from '../helpers/voice-helper';
 
+
 function CurrentStep() {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const scrollX = useRef(new Animated.Value(0)).current;

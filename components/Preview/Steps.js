@@ -136,8 +136,13 @@ const Steps = () => {
                         <Text style={{color: '#000000'}}> {step.details} </Text>
                     </View>
                     <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)} style={{paddingLeft: 25, paddingRight: 25}}>
+                    <View style={styles.modalheader}>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: 'black', flex: 1, paddingLeft: 45}}>Hours</Text>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: 'black', paddingRight: 45}}>Minutes</Text>
+                        </View>
+                        
                         <View style={styles.modal}>
-                           
+                            
                             <WheelPicker
                             style={{height: 130, flex: 1}}
                             initPosition={modalHour}
@@ -145,7 +150,8 @@ const Steps = () => {
                             data={hourPicker}
                             onItemSelected={onHourSelected}
                             />
-
+                            
+                            
                             <WheelPicker
                             style={{height: 130,flex: 1}}
                             initPosition={modalMinute}
@@ -153,6 +159,7 @@ const Steps = () => {
                             data={minutePicker}
                             onItemSelected={onMinuteSelected}
                             />
+                            
                             
                            
                         </View>
@@ -213,10 +220,12 @@ const styles = StyleSheet.create({
     modal: {
         flexDirection: 'row',
         backgroundColor: "white", 
-        borderRadius: 30, 
         padding: 20,
         borderColor: '#F5B463',
         alignContent: 'center',
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+        borderWidth: 2,
     },
     modalbutton: {
         alignItems: "center",
@@ -224,6 +233,20 @@ const styles = StyleSheet.create({
         padding: 15,
         marginTop: 15,
         borderRadius: 30,
+    },
+    modalheader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: "white",
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        marginTop: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderColor: '#F5B463',
+        borderTopWidth: 2,
+        borderLeftWidth: 2,
+        borderRightWidth: 2,
     },
     modalinput: {
         borderColor: 'gray',
