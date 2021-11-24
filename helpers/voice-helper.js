@@ -3,11 +3,27 @@ import { voiceResults } from '../atoms/VoiceResults';
 import { promiseSetRecoil } from "recoil-outside"
 import Voice from '@react-native-voice/voice';
 import Sound from 'react-native-sound';
-
+import Tts from 'react-native-tts';
 
 let porcupineManager
 
 Sound.setCategory('Playback');
+
+function say(text) {
+  if (text.includes("blueberr")) {
+    stopListener();
+  }
+  
+  Tts.getInitStatus().then(() => {
+      Tts.speak(text)
+      Tts.addEventListener('tts-finish', (event) => {
+        if (text.includes("blueberr")) {
+          addListener();
+        }
+      })
+    }) 
+}  
+
 
 function blueberryDetectedSound() {
   var notification1 = new Sound('notification1.mp3', Sound.MAIN_BUNDLE, (error) => {
@@ -116,4 +132,6 @@ module.exports = {
   onSpeechResultsHandler,
   createPorcupineManager,
   removeListeners,
+  addListener,
+  say,
 }

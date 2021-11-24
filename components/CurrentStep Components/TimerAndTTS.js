@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Tts from 'react-native-tts';
 
-import say from '../../helpers/tts-helper';
-
 import { voiceResults } from '../../atoms/VoiceResults';
 import { stepsState } from '../../atoms/Steps';
 import { currentStepIndex } from '../../atoms/CurrentStepIndex';
+import { removeListeners, say } from '../../helpers/voice-helper';
 
 import Sound from 'react-native-sound';
-
-
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -43,8 +40,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
         if (currentIndex === index) {
             if (voiceResultsState.includes("stop timer")
             || voiceResultsState.includes("pause timer")
-            || voiceResultsState.includes("pause")
-            || voiceResultsState.includes("stop")) {
+            || voiceResultsState.includes("pause")) {
                 say("timer stopped")
                 stopTimer();
             } else if (voiceResultsState.includes("start") 
