@@ -69,20 +69,17 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             || voiceResultsState.includes("increase")
             || voiceResultsState.includes("more")) {
                 addTime();
-                    
             } else if (voiceResultsState.includes("subtract")
             || voiceResultsState.includes("decrease timer")
             || voiceResultsState.includes("reduce timer")
             || voiceResultsState.includes("decrease")
             || voiceResultsState.includes("reduce")) {
                 subtractTime();
-                
             } else if (voiceResultsState.includes("reset")
             || voiceResultsState.includes("restart")
             || voiceResultsState.includes("restart timer")
             || voiceResultsState.includes("restart timer")) {
                 resetTimer();
-                   
             } else if (voiceResultsState.includes('stop reading')) {
                 Tts.stop();
             } else if (voiceResultsState.includes("next step")
@@ -104,6 +101,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
             }
         
         }
+        setVoiceResultsState("");
     }
                     
     const speak = () => {
