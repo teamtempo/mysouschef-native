@@ -13,10 +13,9 @@ function say(text) {
   if (text.includes("blueberr")) {
     stopListener();
   }
-  
   Tts.getInitStatus().then(() => {
       Tts.speak(text)
-      Tts.addEventListener('tts-finish', (event) => {
+      Tts.addEventListener('tts-finish', () => {
         if (text.includes("blueberr")) {
           addListener();
         }
