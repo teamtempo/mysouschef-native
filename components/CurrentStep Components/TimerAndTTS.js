@@ -11,6 +11,7 @@ import { currentStepIndex } from '../../atoms/CurrentStepIndex';
 import { removeListeners, say } from '../../helpers/voice-helper';
 
 import Sound from 'react-native-sound';
+import DonePage from './DonePage';
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -23,7 +24,7 @@ const getRemaining = (time) => {
 
 
 
-const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
+const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation}) => {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const [remainingSecs, setRemainingSecs] = useState(time);
     const [isActive, setIsActive] = useState(false);
@@ -31,7 +32,6 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
     
-
     useEffect(() => {
         voiceController();
     },[voiceResultsState]);
@@ -206,7 +206,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     { remainingSecs === 0 || !remainingSecs ? 
                     <TouchableOpacity style={[styles.resumebtn, { backgroundColor: '#E8EBEF' }]}>
-                        <Text> No timer set </Text>
+                        <Text style={{color: 'black'}}> No timer set </Text>
                     </TouchableOpacity>
                     :
                     <TouchableOpacity style={styles.resumebtn} onPress={toggleTimer}>
@@ -216,6 +216,13 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex}) => {
                     <TouchableOpacity style={styles.tts} onPress={speak}>
                         <Text style={{fontSize: 15, color: '#000000'}}> Read Instructions </Text>
                     </TouchableOpacity>
+                </View>
+                <View>
+                    { steps.length === index + 1 && 
+                    <TouchableOpacity style={styles.done} onPress={() => navigation.navigate('DonePage')}>
+                        <Text style={{fontSize: 15, color: '#000000'}}> Done </Text>
+                    </TouchableOpacity>
+                    }
                 </View>
             </View>
         </View>
@@ -253,6 +260,13 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 30
+    },
+    done: {
+        backgroundColor: 'white',
+        padding: 25,
+        alignItems: 'center',
+        borderRadius: 60,
+        marginTop: 10
     }
 });
 

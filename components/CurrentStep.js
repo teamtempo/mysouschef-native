@@ -8,7 +8,7 @@ import { currentStepIndex } from '../atoms/CurrentStepIndex';
 import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResultsHandler, createPorcupineManager, removeListeners } from '../helpers/voice-helper';
 
 
-function CurrentStep() {
+function CurrentStep({ navigation }) {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
@@ -153,7 +153,7 @@ function CurrentStep() {
                             <Text style={styles.deets}> { item.details }</Text>
                             </ScrollView>
                         </View>
-                        <TimerAndTTS step={item.step} instructions={item.details} time={item.timer} index={index} scrollToIndex={scrollToIndex}/>
+                        <TimerAndTTS navigation={navigation} step={item.step} instructions={item.details} time={item.timer} index={index} scrollToIndex={scrollToIndex}/>
                     </View>
                 )
             }}/>
