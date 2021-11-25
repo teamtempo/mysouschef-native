@@ -13,6 +13,10 @@ import { removeListeners, say } from '../../helpers/voice-helper';
 import Sound from 'react-native-sound';
 import DonePage from './DonePage';
 
+import Modal from "react-native-modal";
+
+
+
 const formatNumber = number => `0${number}`.slice(-2);
 
 const getRemaining = (time) => {
@@ -31,6 +35,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
     const { hours, minutes, seconds } = getRemaining(remainingSecs);
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
+    const [modalVisible, setModalVisible] = useState(false);
     
     useEffect(() => {
         voiceController();
@@ -81,6 +86,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
             } else if (voiceResultsState.includes("next step")
             || voiceResultsState.includes("next")) {
                 if (index+1 < steps.length) {
+                    setModalVisible(false);
                     setCurrentIndex(index+1);
                     scrollToIndex(index + 1)
                     say(`step ${currentIndex+2}`)
@@ -88,12 +94,15 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
             } else if (voiceResultsState.includes("previous step")
             || voiceResultsState.includes("previous")) {
                 if (index-1 >= 0) {
+                    setModalVisible(false);
                     setCurrentIndex(index-1);
                     scrollToIndex(index - 1)
                     say(`step ${currentIndex}`)
                 }
             } else if (voiceResultsState !== "") {
                 say("I didnt understand the command, please try again");
+            } else if (voiceResultsState.includes("close") && modalVisible) {
+                setModalVisible(false);
             }
         
         }
@@ -149,10 +158,17 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
         
       }
 
+    function nextStep() {
+        setCurrentIndex(currentIndex + 1);
+        scrollToIndex(currentIndex + 1)
+        setModalVisible(false);
+    }
+
+
     useEffect(() => {
         if (remainingSecs === 0 && isActive === true) {
             setIsActive(false)
-            alert("Timer is done!")
+            setModalVisible(true)
         }
         if (remainingSecs === 1) {
             alarm();
@@ -185,6 +201,22 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
                 <Text style={{fontSize: 20, color: '#000000'}}>{ minutes <= 1 ? "minute" : "minutes"}      { seconds <= 1 ? "second" : "seconds" }</Text>
             </View>
             }
+            <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
+            <View style={styles.modal}>
+                <Text style={{fontSize:22, fontWeight: 'bold'}}>Step complete!</Text>
+               
+            </View>
+            <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closebutton}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Close</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => nextStep()} style={styles.nextstepbutton}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Next step</Text>
+                        </TouchableOpacity>
+            </View>
+           
+                        
+            </Modal>
             <View style={{flex: 0.6, marginTop: 40}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
                     { remainingSecs < 60 ? 
@@ -203,6 +235,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
                         <Icon name="plus-circle" size={40} color="#9AD3BB"/> 
                     </TouchableOpacity>
                 </View>
+                
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     { remainingSecs === 0 || !remainingSecs ? 
                     <TouchableOpacity style={[styles.resumebtn, { backgroundColor: '#E8EBEF' }]}>
@@ -267,7 +300,34 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 60,
         marginTop: 10
-    }
+    },
+    modal: {
+        backgroundColor: "white", 
+        padding: 40,
+        marginLeft: 40,
+        marginRight: 40,
+        borderRadius: 40, 
+        alignItems: 'center',
+        marginBottom:5,
+    },
+    closebutton: {
+        backgroundColor: "#9AD3BB", 
+        padding: 10,
+        borderRadius: 20, 
+        marginLeft: 45,
+        marginRight: 2,
+        marginTop: 2,
+        flex: 1
+    },
+    nextstepbutton: {
+        backgroundColor: "#9AD3BB", 
+        padding: 10,
+        borderRadius: 20, 
+        marginLeft: 2,
+        marginRight: 45,
+        marginTop: 2,
+        flex: 1
+    },
 });
 
 export default TimerAndTTS;
