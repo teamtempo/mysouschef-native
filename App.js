@@ -14,6 +14,8 @@
  import Dashboard from './components/Dashboard';
  import Preview from './components/Preview';
  import CurrentStep from './components/CurrentStep';
+ import DonePage from './components/CurrentStep Components/DonePage';
+ import TimerAndTTS from './components/CurrentStep Components/TimerAndTTS';
  
  import { NavigationContainer } from '@react-navigation/native';
  import { createStackNavigator } from '@react-navigation/stack';
@@ -36,7 +38,8 @@ export default function App() {
           <Stack.Screen name="DashBoard" component={Dashboard} options={{ headerShown: false }} />
           <Stack.Screen name="Preview" component={Preview} options={{ headerShown: false }} />
           <Stack.Screen name="CurrentStep" component={CurrentStep} options={{ headerShown: false }} />
-        </Stack.Navigator>
+          <Stack.Screen name="DonePage" component={DonePage} options={{headerShown: false}} />
+        </Stack.Navigator> 
       </NavigationContainer>
     </RecoilRoot>  
   );
