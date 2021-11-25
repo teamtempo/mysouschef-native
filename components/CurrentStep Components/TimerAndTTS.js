@@ -203,7 +203,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
             }
             <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
             <View style={styles.modal}>
-                <Text style={{fontSize:22, fontWeight: 'bold'}}>Step complete!</Text>
+                <Text style={{fontSize:22, fontWeight: 'bold', color: 'black'}}>Step complete!</Text>
                
             </View>
             <View style={{flexDirection: 'row'}}>
