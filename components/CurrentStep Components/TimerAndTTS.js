@@ -2,20 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import Tts from 'react-native-tts';
+import Sound from 'react-native-sound';
+import Modal from "react-native-modal";
 
 import { voiceResults } from '../../atoms/VoiceResults';
 import { stepsState } from '../../atoms/Steps';
 import { currentStepIndex } from '../../atoms/CurrentStepIndex';
+import { instructionsModal } from '../../atoms/InstructionsModal'; 
 import { removeListeners, say } from '../../helpers/voice-helper';
-
-import Sound from 'react-native-sound';
-import DonePage from './DonePage';
-
-import Modal from "react-native-modal";
-
-
+import { voiceCommandInst } from '../../atoms/VoiceCommandInst';
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -26,8 +22,6 @@ const getRemaining = (time) => {
     return { hours: formatNumber(hours), minutes: formatNumber(minutes), seconds: formatNumber(seconds) };
 }
 
-
-
 const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation}) => {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const [remainingSecs, setRemainingSecs] = useState(time);
@@ -36,7 +30,10 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
     const [modalVisible, setModalVisible] = useState(false);
+    const [showInst, setShowInst] = useRecoilState(instructionsModal);
+    const [inCurrStep, setInCurrStep] = useRecoilState(voiceCommandInst);
     const [lastStepModalVisible, setLastStepModalVisible] = useState(false);
+
     
     useEffect(() => {
         voiceController();
@@ -210,20 +207,18 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
             </View>
             }
             <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
-            <View style={styles.modal}>
-                <Text style={{fontSize:22, fontWeight: 'bold', color: 'black'}}>Step complete!</Text>
-               
-            </View>
-            <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closebutton}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Close</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => nextStep()} style={styles.nextstepbutton}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Next step</Text>
-                        </TouchableOpacity>
-            </View>
-           
-                        
+                <View style={styles.modal}>
+                    <Text style={{fontSize:22, fontWeight: 'bold', color: 'black'}}>Step complete!</Text>
+                
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closebutton}>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Close</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => nextStep()} style={styles.nextstepbutton}>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Next step</Text>
+                    </TouchableOpacity>
+                </View>     
             </Modal>
 
             <Modal isVisible={lastStepModalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
@@ -260,7 +255,6 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
                         <Icon name="plus-circle" size={40} color="#9AD3BB"/> 
                     </TouchableOpacity>
                 </View>
-                
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 7 }}>
                     { remainingSecs === 0 || !remainingSecs ? 
                     <TouchableOpacity style={[styles.resumebtn, { backgroundColor: '#E8EBEF' }]}>
@@ -281,6 +275,11 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
                         <Text style={{fontSize: 15, color: '#000000'}}> Done </Text>
                     </TouchableOpacity>
                     }
+                </View>
+                <View>
+                    <TouchableOpacity style={styles.instructions} onPress={() => {setInCurrStep(true), setShowInst(true)}}>
+                        <Icon name="question-circle" size={30} color="#9AD3BB"/>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -353,6 +352,17 @@ const styles = StyleSheet.create({
         marginTop: 2,
         flex: 1
     },
+    instructions: {
+        backgroundColor: '#fff',
+        position: 'absolute',
+        borderRadius: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 1,
+        width: 30,
+        bottom: 550,   
+        right: 40
+    }
 });
 
 export default TimerAndTTS;

@@ -12,6 +12,9 @@ import { showInstructions } from '../atoms/ShowInstructions';
 import Instructions from './Preview/Instructions';
 import { continueClicked } from '../atoms/ContinueClicked';
 
+import { voiceCommandInst } from '../atoms/VoiceCommandInst';
+
+
 function Preview( { navigation } ) {
     const [atBottom, setAtBottom] = useState(false)
     const [currPos, setCurrPos] = useState();
@@ -31,6 +34,7 @@ function Preview( { navigation } ) {
     const [showInst, setShowInst] = useRecoilState(showInstructions);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
+    const [inCurrStep, setInCurrStep] = useRecoilState(voiceCommandInst);
 
     useEffect(() => {
         if (continueClickedState) {
@@ -56,7 +60,7 @@ function Preview( { navigation } ) {
     <View style={styles.container}>
         <View style={styles.main}>
             <View style={styles.instructions}>
-                <TouchableOpacity onPress={() => setModalVisible(true)} >
+                <TouchableOpacity onPress={() => {setModalVisible(true), setInCurrStep(false)}} >
                     <Text style={{fontSize: 15, color: '#fff', textAlign:'center'}}>Instructions</Text>
                 </TouchableOpacity>
             </View>
@@ -84,7 +88,7 @@ function Preview( { navigation } ) {
             } 
         </View>
         <View style={styles.main}>
-            <TouchableOpacity onPress={() => showInst ? setModalVisible(true) : setContinueClickedState(true)} style={styles.button}>
+            <TouchableOpacity onPress={() => showInst ? (setModalVisible(true), setInCurrStep(false)) : setContinueClickedState(true)} style={styles.button}>
                 <Text style={{fontSize: 25, fontWeight: '900', color: 'white'}}>Start</Text>
             </TouchableOpacity>
             <Instructions continueClicked={continueClicked}/>

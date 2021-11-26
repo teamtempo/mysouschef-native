@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { useRecoilState } from 'recoil';
 
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { showInstructions } from '../../atoms/ShowInstructions';
 import { continueClicked } from '../../atoms/ContinueClicked';
+import { voiceCommandInst } from '../../atoms/VoiceCommandInst';
 
 function storeData(key, value) {
     AsyncStorage.setItem(key, value)
@@ -20,10 +21,11 @@ function storeData(key, value) {
       });
 }
 
-const Instructions = ( {continueClicked} ) => {
+const Instructions = () => {
     const [showInst, setShowInst] = useRecoilState(showInstructions);
     const [modalVisible, setModalVisible] = useRecoilState(instructionsModal);
     const [continueClickedState, setContinueClickedState] = useRecoilState(continueClicked);
+    const [inCurrStep, setInCurrStep] = useRecoilState(voiceCommandInst);
 
     function nextScreen() {
         setModalVisible(false);
@@ -40,7 +42,7 @@ const Instructions = ( {continueClicked} ) => {
     //
     return ( 
         <View>
-            <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
+            <Modal isVisible={modalVisible} backdropOpacity={0.3} onBackdropPress={() => {setModalVisible(false)}}>
                         <View style={styles.modal}>
                             <View style={styles.instructions}>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', paddingBottom: 10}}>
@@ -93,23 +95,29 @@ const Instructions = ( {continueClicked} ) => {
                                     <Text style={{fontWeight: 'bold'}}> ● "Previous step" </Text>
                                     to go to the previous step.
                                 </Text>
-                                <BouncyCheckbox 
-                                    style={{marginTop:10}}
-                                    textStyle={{color:'black', textDecorationLine: "none"}}
-                                    text="Do not show these instructions again"
-                                    isChecked={!showInst}
-                                    onPress={updateInstructions}
-                                    disableBuiltInState={true}
-                                />
+                                { inCurrStep === false ?
+                                <View>
+                                    <BouncyCheckbox 
+                                        style={{marginTop:10}}
+                                        textStyle={{color:'black', textDecorationLine: "none"}}
+                                        text="Do not show these instructions again"
+                                        isChecked={!showInst}
+                                        onPress={updateInstructions}
+                                        disableBuiltInState={true}
+                                    />
+                                </View> : null
+                                }
                             </View>
                         </View>
                         <View style={{flexDirection:"row"}}>
-                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closebutton}>
+                            <TouchableOpacity onPress={() => {setModalVisible(false)}} style={styles.closebutton}>
                                 <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Close</Text>
                             </TouchableOpacity>
+                            { inCurrStep === false ?
                             <TouchableOpacity onPress={() => nextScreen()} style={styles.nextstepbutton}>
                                 <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Start Recipe</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> : null
+                            }  
                         </View>
 
 
