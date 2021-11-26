@@ -11,6 +11,7 @@ import { stepsState } from '../../atoms/Steps';
 import { currentStepIndex } from '../../atoms/CurrentStepIndex';
 import { instructionsModal } from '../../atoms/InstructionsModal'; 
 import { removeListeners, say } from '../../helpers/voice-helper';
+import { voiceCommandInst } from '../../atoms/VoiceCommandInst';
 
 const formatNumber = number => `0${number}`.slice(-2);
 
@@ -29,7 +30,8 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
     const [modalVisible, setModalVisible] = useState(false);
-    const [showInst, setShowInst] = useRecoilState(instructionsModal)
+    const [showInst, setShowInst] = useRecoilState(instructionsModal);
+    const [inCurrStep, setInCurrStep] = useRecoilState(voiceCommandInst);
     
     useEffect(() => {
         voiceController();
@@ -249,7 +251,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
                     }
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.instructions} onPress={() => setShowInst(true)}>
+                    <TouchableOpacity style={styles.instructions} onPress={() => {setInCurrStep(true), setShowInst(true)}}>
                         <Icon name="question-circle" size={30} color="#9AD3BB"/>
                     </TouchableOpacity>
                 </View>
