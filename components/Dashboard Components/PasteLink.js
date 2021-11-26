@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { unitChoice } from '../../atoms/UnitChoice';
 import { pastLinks } from '../../atoms/PastLinks';
 import { linkUpdate } from '../../atoms/LinkUpdate';
+import { errorModal } from '../../atoms/ErrorModal';
 
 function storeData(key, value) {
     AsyncStorage.setItem(key, value)
@@ -31,6 +32,7 @@ function PasteLink( { navigation } ) {
     const steps = useRef(initSteps)
 
     const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
+    const [isError, setIsError] = useRecoilState(errorModal);
     const ingredients = useRef(initIngredients)
 
     const [ImperialIsEnabled, setImperialIsEnabled] = useRecoilState(unitChoice);
@@ -61,32 +63,26 @@ function PasteLink( { navigation } ) {
     }, [initIngredients])
 
     async function fetchData() {
-        setIsLoading(true);
         let res;
-        if (ImperialIsEnabled) {
-            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=imperial`);
+        try {
+            if (ImperialIsEnabled) {
+                res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=imperial`);
+            } else {
+                res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
+            }
+            console.log(res.data)
             setIsLoading(false);
-        } else {
-            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=metric`);
-            setIsLoading(false);
-        }
-        
-        if (res.data === "Site not yet supported") {
-            alert("The website provided is not yet supported, please try another website.")
-        } else if (res.data === "Failed to parse domain") {
-            alert("The url provided is invalid, please try again.")
-        } else if (res.data === "No recipe found on page") {
-            alert("No recipe found on page, try another recipe")
-        } else if (res.data.includes("url provided must include")) {
-            alert("The url provided must include http:// or https://") 
-        } else {
             navigation.navigate('Preview')
             const aData = new Date();
             addHistory(url, JSON.stringify([res.data[0].title, aData]));
             setInitIngredients(res.data[1])
             setInitSteps(res.data.slice(2));
             textInput.current.clear();
+        } catch (error) {
+            setIsError([true,error.response.data])
+            setIsLoading(false);
         }
+       
     }
     
     return (
@@ -99,7 +95,7 @@ function PasteLink( { navigation } ) {
                     placeholder='paste recipe url here'
                     onPressIn={() => textInput.current.clear()}
                     onChangeText={(val) => setURL(val)}/>
-                <TouchableOpacity style={styles.button} onPress={fetchData}>
+                <TouchableOpacity style={[styles.button, styles.iconShadow]} onPress={fetchData}>
                     <Text style={{ color: '#000000' }}>GO</Text>
                 </TouchableOpacity> 
             </View>
@@ -151,6 +147,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#9AD3BB',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    iconShadow: {
+        elevation: 5, 
     },
     switch: {
         flex: 1,

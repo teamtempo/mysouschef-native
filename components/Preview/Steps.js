@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
     timerbtn: {
         padding: 7,
         backgroundColor: '#9AD3BB',
-        borderRadius: 20
+        borderRadius: 20,
+        elevation:5
     },
     overview: {
         display: 'flex',
