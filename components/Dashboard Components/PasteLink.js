@@ -64,6 +64,7 @@ function PasteLink( { navigation } ) {
 
     async function fetchData() {
         let res;
+        setIsLoading(true);
         try {
             if (ImperialIsEnabled) {
                 res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${url}&unit=imperial`);
