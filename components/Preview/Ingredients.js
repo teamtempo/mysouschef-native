@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRecoilValue } from 'recoil';
 import { ingredientsState } from '../../atoms/Ingredients';
 import { Transition, Transitioning } from 'react-native-reanimated';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const transition = (
     <Transition.Together>
@@ -33,6 +34,11 @@ const Ingredients = () => {
             }>
                <View style={styles.card}>
                    <Text style={styles.heading}> Ingredients </Text>
+                   { isPressed ? 
+                   <Icon name="chevron-circle-up" size={35} color="#fff"/>
+                   :
+                   <Icon name="chevron-circle-down" size={35} color="#fff"/>
+                   }
                </View>
                { isPressed && (
                 <View style={styles.list}>
@@ -63,7 +69,10 @@ const styles = StyleSheet.create({
     },
     card: {
         flexGrow: 1,
-        padding: 10
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     heading: {
         color: "#fff",
