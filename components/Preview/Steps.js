@@ -1,5 +1,5 @@
-import React, { useState }from 'react'
-import { StyleSheet, Text, View, Button, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect }from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../../atoms/Steps'
 import Modal from "react-native-modal";
@@ -24,9 +24,11 @@ const Steps = () => {
     const editTimer = (index) => {
         let hours = Math.floor(steps[index].timer / 3600);
         let minutes = Math.floor((steps[index].timer - hours * 3600) / 60)
-        
+        console.log(hours, minutes)
         setModalHour(hours);
         setModalMinute(minutes);
+        setSelectedHour(hours);
+        setSelectedMinute(minutes);
 
         setModalVisible(true);
         setModalstep(steps[index].step);
@@ -104,6 +106,10 @@ const Steps = () => {
         setSteps(newList);
     };
 
+    useEffect(() => {
+        //onHourSelected();
+        //onMinuteSelected();
+    }, [])
 
     let onHourSelected = selectedItem => {
         setSelectedHour(selectedItem);
@@ -163,8 +169,8 @@ const Steps = () => {
                             
                            
                         </View>
-                        <TouchableOpacity style={styles.modalbutton}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}onPress={() => {saveTimer()}}>Save timer</Text>
+                        <TouchableOpacity style={styles.modalbutton} onPress={() => {saveTimer()}}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}>Save timer</Text>
                         </TouchableOpacity>
                     </Modal>
                 </View>
