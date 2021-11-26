@@ -111,7 +111,7 @@ function Dashboard({ navigation }) {
                   <View style={styles.item}>
                       <History navigation={navigation}/>
                   </View>
-                  <View style={{paddingTop: 15}}>
+                  <View style={{paddingTop: 10}}>
                     <Text onPress={() => setModalVisible(true)} style={{color: "#F3EAC2"}}> © Team Tempo 2021 </Text>
                   </View>
               </View>
