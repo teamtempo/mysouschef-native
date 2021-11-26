@@ -36,6 +36,7 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
     const [voiceResultsState, setVoiceResultsState] = useRecoilState(voiceResults);
     const steps = useRecoilValue(stepsState);
     const [modalVisible, setModalVisible] = useState(false);
+    const [lastStepModalVisible, setLastStepModalVisible] = useState(false);
     
     useEffect(() => {
         voiceController();
@@ -165,11 +166,18 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
     }
 
 
+
     useEffect(() => {
-        if (remainingSecs === 0 && isActive === true) {
+        if (remainingSecs === 55 && isActive === true && index +1 < steps.length) {
             setIsActive(false)
             setModalVisible(true)
         }
+
+        if (remainingSecs === 55 && isActive === true && index +1 === steps.length) {
+            setIsActive(false)
+            setLastStepModalVisible(true);
+        }
+        
         if (remainingSecs === 1) {
             alarm();
         }
@@ -212,6 +220,23 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => nextStep()} style={styles.nextstepbutton}>
                             <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Next step</Text>
+                        </TouchableOpacity>
+            </View>
+           
+                        
+            </Modal>
+
+            <Modal isVisible={lastStepModalVisible} backdropOpacity={0.3} onBackdropPress={() => setModalVisible(false)}>
+            <View style={styles.modal}>
+                <Text style={{fontSize:22, fontWeight: 'bold', color: 'black'}}>Step complete!</Text>
+               
+            </View>
+            <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => setLastStepModalVisible(false)} style={styles.closebutton}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Close</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('DonePage')}style={styles.nextstepbutton}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}}>Done</Text>
                         </TouchableOpacity>
             </View>
            
