@@ -13,11 +13,13 @@ import { loading } from '../atoms/Loading';
 import { pastLinks } from '../atoms/PastLinks';
 import { micPermission } from '../atoms/MicPermission';
 import { linkUpdate } from '../atoms/LinkUpdate';
+import { errorModal } from '../atoms/ErrorModal';
 
 function Dashboard({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [pastLinksState, setPastLinksState] = useRecoilState(pastLinks);
     const [linkUpdated, setLinkUpdated] = useRecoilState(linkUpdate);
+    const [isError, setIsError] = useRecoilState(errorModal);
     const [micPermissionState, setMicPermissionState] = useRecoilState(micPermission);
     const isLoading = useRecoilValue(loading);
 
@@ -87,9 +89,20 @@ function Dashboard({ navigation }) {
         Keyboard.dismiss();
       }}>
       <KeyboardAvoidingView behavior="position" style={styles.container}>
+        <Modal isVisible={isError[0]} backdropOpacity={0.3} onBackdropPress={() => setIsError([false,""])}>
+          <View style={styles.modal}>
+              <Text style={{fontSize:22, fontWeight: 'bold', color: 'black'}}>{isError[1]}</Text>
+          </View>
+          <View style={styles.modalButton}>
+          <TouchableOpacity onPress={() => setIsError([false,""])}>
+            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Close</Text>
+          </TouchableOpacity>
+          </View>           
+      </Modal>  
+
           {!isLoading ? null : ( 
               <View style={styles.activityIndicator}>
-                <Text style={{ fontSize:20 }}>Loading Recipe</Text>
+                <Text style={{ fontSize:20 }}>Loading Recipe {isLoading}</Text>
                 <ActivityIndicator style={{height:100}} size={75} />
               </View>
             )}
@@ -111,7 +124,7 @@ function Dashboard({ navigation }) {
                   <View style={styles.item}>
                       <History navigation={navigation}/>
                   </View>
-                  <View style={{paddingTop: 15}}>
+                  <View style={{paddingTop: 10}}>
                     <Text onPress={() => setModalVisible(true)} style={{color: "#F3EAC2"}}> © Team Tempo 2021 </Text>
                   </View>
               </View>

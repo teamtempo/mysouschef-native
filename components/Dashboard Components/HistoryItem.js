@@ -8,7 +8,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { stepsState } from '../../atoms/Steps';
 import { loading } from '../../atoms/Loading';
 import { ingredientsState } from '../../atoms/Ingredients';
-
+import { errorModal } from '../../atoms/ErrorModal';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { unitChoice } from '../../atoms/UnitChoice';
@@ -20,7 +20,7 @@ const HistoryItem = ({navigation, item}) => {
     const [linkUpdated, setLinkUpdated] = useRecoilState(linkUpdate);
     const [initIngredients, setInitIngredients] = useRecoilState(ingredientsState);
     const [ImperialIsEnabled, setImperialIsEnabled] = useRecoilState(unitChoice);
-    
+    const [isError, setIsError] = useRecoilState(errorModal);
     const [links, setLinks] = useRecoilState(pastLinks);
     
     const steps = useRef(initSteps)
@@ -38,18 +38,22 @@ const HistoryItem = ({navigation, item}) => {
     async function getLink() {
         setIsLoading(true);
         let res;
-        let clickedItem = links.find(link => link.value === item);
-        let link = clickedItem.key;
-        if (ImperialIsEnabled) {
-            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=imperial`);
+        try {
+            let clickedItem = links.find(link => link.value === item);
+            let link = clickedItem.key;
+            if (ImperialIsEnabled) {
+                res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=imperial`);
+            } else {
+                res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
+            }
             setIsLoading(false);
-        } else {
-            res = await axios.get(`https://my-souschef.herokuapp.com/recipe?url=${link}&unit=metric`);
+            navigation.navigate('Preview')  
+            setInitSteps(res.data.slice(2));
+            setInitIngredients(res.data[1])
+        } catch (error) {
+            setIsError([true,error.response.data])
             setIsLoading(false);
         }
-        navigation.navigate('Preview')  
-        setInitSteps(res.data.slice(2));
-        setInitIngredients(res.data[1])
     }
 
     async function deleteLink() {
@@ -103,7 +107,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
     },
 })
 

@@ -103,9 +103,14 @@ const Instructions = ( {continueClicked} ) => {
                                 />
                             </View>
                         </View>
-                        <TouchableOpacity onPress={() => nextScreen()} style={styles.continueButton}>
-                            <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}} >Continue</Text>
-                        </TouchableOpacity>
+                        <View style={{flexDirection:"row"}}>
+                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closebutton}>
+                                <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Close</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => nextScreen()} style={styles.nextstepbutton}>
+                                <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center'}} >Start Recipe</Text>
+                            </TouchableOpacity>
+                        </View>
 
 
             </Modal>
@@ -135,12 +140,23 @@ const styles = StyleSheet.create({
         paddingLeft: 17,
         paddingRight: 17
     },
-    continueButton: {
+    closebutton: {
         backgroundColor: "#9AD3BB", 
-        padding: 15,
-        alignItems: 'center', 
-        borderRadius: 40, 
-        marginTop: 10
+        padding: 10,
+        borderRadius: 20, 
+        marginLeft: 0,
+        marginRight: 2,
+        marginTop: 2,
+        flex: 1
+    },
+    nextstepbutton: {
+        backgroundColor: "#9AD3BB", 
+        padding: 10,
+        borderRadius: 20, 
+        marginLeft: 2,
+        marginRight: 0,
+        marginTop: 2,
+        flex: 1
     },
     noMoreInstructions: {
         marginTop:10,

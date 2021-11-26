@@ -128,7 +128,7 @@ const Steps = () => {
                         </View>
                         <View style={styles.timerbtn}>
                             <TouchableOpacity onPress={() => {editTimer(index)}}>
-                                <Text style={{color: '#000000'}}> edit timer </Text>
+                                <Text style={{color: '#fff'}}> Edit Timer </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
     timerbtn: {
         padding: 7,
         backgroundColor: '#9AD3BB',
-        borderRadius: 20
+        borderRadius: 20,
+        elevation:5
     },
     overview: {
         display: 'flex',
