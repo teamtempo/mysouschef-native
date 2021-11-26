@@ -168,12 +168,12 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
 
 
     useEffect(() => {
-        if (remainingSecs === 55 && isActive === true && index +1 < steps.length) {
+        if (remainingSecs === 0 && isActive === true && index +1 < steps.length) {
             setIsActive(false)
             setModalVisible(true)
         }
 
-        if (remainingSecs === 55 && isActive === true && index +1 === steps.length) {
+        if (remainingSecs === 0 && isActive === true && index +1 === steps.length) {
             setIsActive(false)
             setLastStepModalVisible(true);
         }
