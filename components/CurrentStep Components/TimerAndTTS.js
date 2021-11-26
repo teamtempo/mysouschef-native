@@ -31,7 +31,6 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
     const steps = useRecoilValue(stepsState);
     const [modalVisible, setModalVisible] = useState(false);
     const [showInst, setShowInst] = useRecoilState(instructionsModal);
-    const [inCurrStep, setInCurrStep] = useRecoilState(voiceCommandInst);
     const [lastStepModalVisible, setLastStepModalVisible] = useState(false);
 
     
@@ -276,12 +275,8 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
                     </TouchableOpacity>
                     }
                 </View>
-                <View>
-                    <TouchableOpacity style={styles.instructions} onPress={() => {setInCurrStep(true), setShowInst(true)}}>
-                        <Icon name="question-circle" size={30} color="#9AD3BB"/>
-                    </TouchableOpacity>
-                </View>
             </View>
+               
         </View>
     )
 }
@@ -360,9 +355,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 1,
         width: 30,
-        bottom: 550,   
-        right: 40
+        bottom: 400,   
+        right: 40,
+        zIndex: 100
     }
+    
 });
 
 export default TimerAndTTS;

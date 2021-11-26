@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react'
-import { Animated, StyleSheet, View, Dimensions, Text, ScrollView } from 'react-native';
+import { Animated, StyleSheet, View, Dimensions, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { stepsState } from '../atoms/Steps';
 import TimerAndTTS from './CurrentStep Components/TimerAndTTS';
@@ -7,16 +7,24 @@ import Voice from '@react-native-voice/voice';
 import { currentStepIndex } from '../atoms/CurrentStepIndex';
 import { onSpeechStartHandler, onSpeechEndHandler, onSpeechError, onSpeechResultsHandler, createPorcupineManager, removeListeners } from '../helpers/voice-helper';
 
+import { voiceCommandInst } from '../atoms/VoiceCommandInst';
+import { instructionsModal } from '../atoms/InstructionsModal'; 
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function CurrentStep({ navigation }) {
     const [currentIndex, setCurrentIndex] = useRecoilState(currentStepIndex);
     const scrollX = useRef(new Animated.Value(0)).current;
     const {width, height} = Dimensions.get('screen');
 
+    const [inCurrStep, setInCurrStep] = useRecoilState(voiceCommandInst);
+    const [showInst, setShowInst] = useRecoilState(instructionsModal);
+
+
     const [steps, setSteps] = useRecoilState(stepsState);
     const flatListRef = useRef();
 
-    useEffect(() => {
+    useEffect(() => {   
         Voice.onSpeechStart = onSpeechStartHandler;
         Voice.onSpeechEnd = onSpeechEndHandler;
         Voice.onSpeechResults = onSpeechResultsHandler;
@@ -157,6 +165,11 @@ function CurrentStep({ navigation }) {
                     </View>
                 )
             }}/>
+             <View>
+                    <TouchableOpacity style={styles.instructions} onPress={() => {setInCurrStep(true), setShowInst(true)}}>
+                        <Icon name="question-circle" size={40} color="#9AD3BB"/>
+                    </TouchableOpacity>
+                </View>
             <Indicator scrollX={scrollX}/>
         </View>
     )
@@ -179,6 +192,18 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         padding: 30,
         color: '#000000'
+    },
+    instructions: {
+        backgroundColor: '#fff',
+        position: 'absolute',
+        borderRadius: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 1,
+        width: 40,
+        bottom: 675,   
+        left: 140,
+        zIndex: 100
     }
 });
 
