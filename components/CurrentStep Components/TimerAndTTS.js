@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 1,
         width: 30,
-        bottom: 530,
+        bottom: 550,   
         right: 40
     }
 });
