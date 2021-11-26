@@ -57,7 +57,7 @@ function Preview( { navigation } ) {
         <View style={styles.main}>
             <View style={styles.instructions}>
                 <TouchableOpacity onPress={() => setModalVisible(true)} >
-                    <Text style={{fontSize: 15, fontWeight: '500', color: 'white', textAlign:'center'}}>Show Instructions</Text>
+                    <Text style={{fontSize: 15, color: '#fff', textAlign:'center'}}>Instructions</Text>
                 </TouchableOpacity>
             </View>
             <Text style={styles.title}>Recipe</Text>
