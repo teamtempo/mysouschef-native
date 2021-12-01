@@ -55,8 +55,10 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
             || voiceResultsState.includes("begin timer")
             || voiceResultsState.includes("begin")
             || voiceResultsState.includes("resume")) {
-                say("timer started")
-                startTimer();
+                if (remainingSecs >= 60) {
+                    say("timer started")
+                    startTimer();
+                }
             } else if (voiceResultsState.includes("read instructions")
             || voiceResultsState.includes("read step")
             || voiceResultsState.includes("instructions")
@@ -76,7 +78,9 @@ const TimerAndTTS = ({step, instructions, time, index, scrollToIndex, navigation
             || voiceResultsState.includes("reduce timer")
             || voiceResultsState.includes("decrease")
             || voiceResultsState.includes("reduce")) {
-                subtractTime();
+                if (remainingSecs >= 60) {
+                    subtractTime();
+                }        
             } else if (voiceResultsState.includes("reset")
             || voiceResultsState.includes("restart")
             || voiceResultsState.includes("restart timer")
