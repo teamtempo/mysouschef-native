@@ -43,7 +43,7 @@
 
 ## Live Application
 
-<h4> Download it on Google Play Store! </h4>
+<h4> <a href="https://play.google.com/store/apps/details?id=com.mysouschefnative">Download it on Google Play Store!</a> </h4>
 
 ## Source Packages
 
